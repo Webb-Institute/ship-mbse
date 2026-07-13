@@ -6,6 +6,7 @@ slprj/
 codegen/
 *.slxc
 octave-workspace
+resources/
 
 # --- OS ---
 .DS_Store
