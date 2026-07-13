@@ -1,0 +1,36 @@
+# --- MATLAB ---
+*.asv
+*.m~
+*.autosave
+slprj/
+codegen/
+*.slxc
+octave-workspace
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Editors / IDEs ---
+.vscode/
+.idea/
+*.swp
+
+# --- Generated outputs (keep folder structure via .gitkeep, ignore contents) ---
+outputs/reports/*
+!outputs/reports/.gitkeep
+outputs/figures/*
+!outputs/figures/.gitkeep
+outputs/tables/*
+!outputs/tables/.gitkeep
+outputs/case_study/*
+!outputs/case_study/.gitkeep
+
+# --- Generated/derived data (keep folder structure via .gitkeep, ignore contents) ---
+data/analysis_results/*
+!data/analysis_results/.gitkeep
+
+# --- Logs / temp ---
+*.log
+*.tmp
