@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <MF0 version="1.1" packageUris="http://schema.mathworks.com/mf0/meta/19700101 http://schema.mathworks.com/mf0/systemcomposer_property/2.13 http://schema.mathworks.com/mf0/systemcomposer_services_proxy/1.2">
-  <systemcomposer.services.proxy.ModelIdentifier type="systemcomposer.services.proxy.ModelIdentifier" uuid="5de54571-2353-4b3f-a003-52476a12950a">
-    <URI>ElectricalProfile</URI>
-    <modelType>PROFILE_MODEL</modelType>
-  </systemcomposer.services.proxy.ModelIdentifier>
   <systemcomposer.profile.Profile type="systemcomposer.profile.Profile" uuid="c51af674-93ab-4e5e-b6bd-d7d4a9ac42e2">
     <prototypes type="systemcomposer.profile.Prototype" uuid="ce49fb7a-f25a-4d5a-9107-f06df3ae6988">
       <appliesTo>Component</appliesTo>
       <componentHeaderColor type="systemcomposer.profile.RGBValueStruct">
-        <BLUE>190</BLUE>
-        <GREEN>113</GREEN>
-        <RED>17</RED>
+        <BLUE>50</BLUE>
+        <GREEN>170</GREEN>
+        <RED>59</RED>
       </componentHeaderColor>
       <p_Name>ElectricalConsumer</p_Name>
       <defaultStereotypeMap type="systemcomposer.profile.DefaultStereotypeMap" uuid="84f747bd-9014-46cf-b470-8a5fdcd70081"/>
@@ -100,9 +96,9 @@
     <prototypes type="systemcomposer.profile.Prototype" uuid="b8c0df2b-baa7-466c-a71d-27928c8719b8">
       <appliesTo>Component</appliesTo>
       <componentHeaderColor type="systemcomposer.profile.RGBValueStruct">
-        <BLUE>32</BLUE>
-        <GREEN>177</GREEN>
-        <RED>237</RED>
+        <BLUE>64</BLUE>
+        <GREEN>219</GREEN>
+        <RED>73</RED>
       </componentHeaderColor>
       <p_Name>ElectricalGenerator</p_Name>
       <defaultStereotypeMap type="systemcomposer.profile.DefaultStereotypeMap" uuid="316abb4c-b3b8-448a-bdc2-2a8e469bd0c7"/>
@@ -225,6 +221,10 @@
     <p_Name>ElectricalProfile</p_Name>
     <elemProxy type="systemcomposer.services.proxy.ProxyTarget" uuid="59743fc2-b851-4dc6-968c-9fdf529e537e"/>
   </systemcomposer.profile.Profile>
+  <systemcomposer.services.proxy.ModelIdentifier type="systemcomposer.services.proxy.ModelIdentifier" uuid="5de54571-2353-4b3f-a003-52476a12950a">
+    <URI>ElectricalProfile</URI>
+    <modelType>PROFILE_MODEL</modelType>
+  </systemcomposer.services.proxy.ModelIdentifier>
   <systemcomposer.property.UnitQueryClientWrapper type="systemcomposer.property.UnitQueryClientWrapper" uuid="24f97a9c-6401-49a8-942b-1083ad9974e9"/>
   <systemcomposer.services.proxy.ModelResolver type="systemcomposer.services.proxy.ModelResolver" uuid="3745edfe-672d-46e6-813d-77a2103de021">
     <Proxies type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="80826f80-49eb-45aa-8841-c944c265f916">
