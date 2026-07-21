@@ -123,6 +123,34 @@
           </typeProxy>
           <elemProxy type="systemcomposer.services.proxy.ProxyTarget" uuid="51c24051-4061-436e-bb98-16d13cc6427d"/>
         </properties>
+        <properties type="systemcomposer.property.PropertyDefinition" uuid="2c50c8ea-77e8-4c13-b281-10c8c2da009e">
+          <currentVersionId>d3c4eb7b-a7ad-4ff4-883c-6accee052336</currentVersionId>
+          <p_Index>4</p_Index>
+          <p_Name>WeightMargin</p_Name>
+          <defaultValue type="systemcomposer.property.Value" uuid="a1fe47e3-4d87-494b-a429-c202acf92f59">
+            <units>%</units>
+            <valueTypeProxy type="systemcomposer.services.proxy.ProxySource" uuid="fe85ce00-48d1-45d6-91fe-7334eb23edf7">
+              <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="8f6d7dfa-90e4-4e49-ad9c-98af0eea5728"/>
+              <realElement type="systemcomposer.property.Value" uuid="a1fe47e3-4d87-494b-a429-c202acf92f59"/>
+            </valueTypeProxy>
+          </defaultValue>
+          <ownedType type="systemcomposer.property.FloatType" uuid="8720b294-1475-4b4f-be15-57bda3cdb0bc">
+            <max>100.0</max>
+            <min>0.0</min>
+            <unitChecker type="systemcomposer.property.UnitQueryClientWrapper" uuid="147411bd-127e-4d8d-bf78-0bbb718056f7"/>
+            <units>%</units>
+            <typeProxy type="systemcomposer.services.proxy.ProxySource" uuid="a3d964a5-7742-47a5-afc7-99825ca8928f">
+              <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="c9eacc62-e1a2-4b2b-b858-4e6e0e55f336"/>
+              <realElement type="systemcomposer.property.FloatType" uuid="8720b294-1475-4b4f-be15-57bda3cdb0bc"/>
+            </typeProxy>
+            <elemProxy type="systemcomposer.services.proxy.ProxyTarget" uuid="efc631f7-b848-4b13-ad21-39c058930296"/>
+          </ownedType>
+          <typeProxy type="systemcomposer.services.proxy.ProxySource" uuid="dd6f49e1-199f-476d-88c6-b5ad3d7037cb">
+            <Proxy type="systemcomposer.services.proxy.BidirectionalProxy" uuid="db416b17-25df-4992-9548-5301c2c545ab"/>
+            <realElement type="systemcomposer.property.PropertyDefinition" uuid="2c50c8ea-77e8-4c13-b281-10c8c2da009e"/>
+          </typeProxy>
+          <elemProxy type="systemcomposer.services.proxy.ProxyTarget" uuid="b9b74e2d-016d-489e-8cc8-77156cd9fb4e"/>
+        </properties>
         <p_Name>WeightsCenters</p_Name>
         <elemProxy type="systemcomposer.services.proxy.ProxyTarget" uuid="36cdb1fb-1d14-4997-829b-aa12302f9e4e"/>
       </propertySet>
@@ -190,11 +218,11 @@
     <p_Name>WeightsCentersProfile</p_Name>
     <elemProxy type="systemcomposer.services.proxy.ProxyTarget" uuid="e503f9f7-6941-4303-ab94-2a31ebabd4df"/>
   </systemcomposer.profile.Profile>
-  <systemcomposer.property.UnitQueryClientWrapper type="systemcomposer.property.UnitQueryClientWrapper" uuid="147411bd-127e-4d8d-bf78-0bbb718056f7"/>
   <systemcomposer.services.proxy.ModelIdentifier type="systemcomposer.services.proxy.ModelIdentifier" uuid="7c1cce35-0223-48b0-ae37-c08ecf693336">
     <URI>WeightsCentersProfile</URI>
     <modelType>PROFILE_MODEL</modelType>
   </systemcomposer.services.proxy.ModelIdentifier>
+  <systemcomposer.property.UnitQueryClientWrapper type="systemcomposer.property.UnitQueryClientWrapper" uuid="147411bd-127e-4d8d-bf78-0bbb718056f7"/>
   <systemcomposer.services.proxy.ModelResolver type="systemcomposer.services.proxy.ModelResolver" uuid="1afd66ab-1355-4891-9172-ac8ceb34f89b">
     <Proxies type="systemcomposer.services.proxy.BidirectionalProxy" uuid="19915034-0dc8-4422-8341-ee1b3809be00">
       <Source type="systemcomposer.services.proxy.ProxySource" uuid="4a03f696-5343-4f7d-b750-b56041ffc1f0"/>
@@ -208,6 +236,10 @@
       <Source type="systemcomposer.services.proxy.ProxySource" uuid="f5e6a4e8-9620-4f93-9106-1db23bccd504"/>
       <TargetId>4466f757-e280-42d9-af47-8f4e152b3171</TargetId>
     </Proxies>
+    <Proxies type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="8f6d7dfa-90e4-4e49-ad9c-98af0eea5728">
+      <Source type="systemcomposer.services.proxy.ProxySource" uuid="fe85ce00-48d1-45d6-91fe-7334eb23edf7"/>
+      <TargetId>8720b294-1475-4b4f-be15-57bda3cdb0bc</TargetId>
+    </Proxies>
     <Proxies type="systemcomposer.services.proxy.BidirectionalProxy" uuid="22398529-5710-42e9-89fa-4fca58cb6409">
       <Source type="systemcomposer.services.proxy.ProxySource" uuid="d9248439-17bf-4e7a-957e-d95c62514e80"/>
       <TargetId>aea3bc76-914f-4eca-a5c1-6499d9fc28d0</TargetId>
@@ -217,6 +249,7 @@
       <Source type="systemcomposer.services.proxy.ProxySource" uuid="f3201b69-d1e9-4290-a4d3-1e1096abd5c3"/>
       <Source type="systemcomposer.services.proxy.ProxySource" uuid="46332419-d3db-4001-a444-6cc4f711d532"/>
       <Source type="systemcomposer.services.proxy.ProxySource" uuid="8dd01b57-1c2e-4154-a7ff-2b362112c804"/>
+      <Source type="systemcomposer.services.proxy.ProxySource" uuid="a3d964a5-7742-47a5-afc7-99825ca8928f"/>
       <TargetId>b37fdb58-5492-4680-bc79-0242d74cc115</TargetId>
     </Proxies>
     <Proxies type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="e249239e-a1f3-4490-a619-5715e759f6ec">
@@ -231,9 +264,14 @@
       <Source type="systemcomposer.services.proxy.ProxySource" uuid="34717641-acea-4e27-963a-77f84e9ce531"/>
       <TargetId>eeb2edd5-68dd-4ba0-8048-c73d94566e4d</TargetId>
     </Proxies>
+    <Proxies type="systemcomposer.services.proxy.BidirectionalProxy" uuid="db416b17-25df-4992-9548-5301c2c545ab">
+      <Source type="systemcomposer.services.proxy.ProxySource" uuid="dd6f49e1-199f-476d-88c6-b5ad3d7037cb"/>
+      <TargetId>efc631f7-b848-4b13-ad21-39c058930296</TargetId>
+    </Proxies>
     <Proxies type="systemcomposer.services.proxy.BidirectionalProxy" uuid="80d72225-d071-4449-94fb-8a44280d9dad">
       <Source type="systemcomposer.services.proxy.ProxySource" uuid="64221aa7-dc20-47cb-8802-059357e1a42a"/>
       <TargetId>f115975f-05f6-41fc-b0d5-c1bc9a33a2c0</TargetId>
     </Proxies>
   </systemcomposer.services.proxy.ModelResolver>
+  <systemcomposer.services.proxy.WorkspaceWrapper type="systemcomposer.services.proxy.WorkspaceWrapper" uuid="e180ff58-6978-49fe-8940-90dc24814908"/>
 </MF0>
