@@ -861,7 +861,7 @@
         <properties type="systemcomposer.property.PropertyDefinition" uuid="acb6fdf6-2ab8-465b-a2fe-e4d7d4580ba9">
           <currentVersionId>130f75a7-5952-4688-a80f-39456637905d</currentVersionId>
           <p_Index>10</p_Index>
-          <p_Name>TriFluid</p_Name>
+          <p_Name>TerFluid</p_Name>
           <defaultValue type="systemcomposer.property.Value" uuid="31e7eb20-dc72-42c2-8f85-94227749a001">
             <valueTypeProxy type="systemcomposer.services.proxy.ProxySource" uuid="7a57f9d2-a9ba-40a8-b8d4-3477f6bd6a6f">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="ce451e12-4339-40c3-acf0-38270e6c82fe"/>
@@ -1214,7 +1214,7 @@
           <elemProxy type="systemcomposer.services.proxy.ProxyTarget" uuid="35ddc826-f7cb-423e-98f9-6663427f63c2"/>
         </properties>
         <properties type="systemcomposer.property.PropertyDefinition" uuid="83975ff2-2c79-43a7-9130-79b0c67c795e">
-          <currentVersionId>d9bfdd50-f562-47ce-97a5-08c5b11465ad</currentVersionId>
+          <currentVersionId>435d63c8-d041-4d1e-98f6-ffed222fb2fc</currentVersionId>
           <p_Index>3</p_Index>
           <p_Name>TCG</p_Name>
           <defaultValue type="systemcomposer.property.Value" uuid="92eab917-b6f8-45bd-a7e8-6797f3eb2be0">
@@ -1225,7 +1225,7 @@
             </valueTypeProxy>
           </defaultValue>
           <ownedType type="systemcomposer.property.FloatType" uuid="773f4dc3-59b4-4875-83a6-3c05b30b8046">
-            <min>0.0</min>
+            <min>-200.0</min>
             <unitChecker type="systemcomposer.property.UnitQueryClientWrapper" uuid="025be04f-bbb2-4b65-9cba-3d61f692ce85"/>
             <units>m</units>
             <typeProxy type="systemcomposer.services.proxy.ProxySource" uuid="4d5b18e8-dd4c-453d-9ebf-7282985d6012">
@@ -1738,5 +1738,6 @@
       <TargetId>ffdd2163-d579-4e8a-9f62-fc862ce1ba1d</TargetId>
     </Proxies>
   </systemcomposer.services.proxy.ModelResolver>
+  <systemcomposer.services.proxy.WorkspaceWrapper type="systemcomposer.services.proxy.WorkspaceWrapper" uuid="55b50afc-eabc-48df-a81d-2d83c51165a9"/>
   <systemcomposer.services.proxy.WorkspaceWrapper type="systemcomposer.services.proxy.WorkspaceWrapper" uuid="19713cde-1412-4c92-97fd-1af0beb30642"/>
 </MF0>
