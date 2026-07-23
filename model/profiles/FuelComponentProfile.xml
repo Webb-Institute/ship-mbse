@@ -1145,11 +1145,11 @@
           <elemProxy type="systemcomposer.services.proxy.ProxyTarget" uuid="35ddc826-f7cb-423e-98f9-6663427f63c2"/>
         </properties>
         <properties type="systemcomposer.property.PropertyDefinition" uuid="83975ff2-2c79-43a7-9130-79b0c67c795e">
-          <currentVersionId>4bab3712-bf22-4c24-a5d7-bf51b1f97ee1</currentVersionId>
+          <currentVersionId>d9bfdd50-f562-47ce-97a5-08c5b11465ad</currentVersionId>
           <p_Index>3</p_Index>
           <p_Name>TCG</p_Name>
           <defaultValue type="systemcomposer.property.Value" uuid="92eab917-b6f8-45bd-a7e8-6797f3eb2be0">
-            <units>t</units>
+            <units>m</units>
             <valueTypeProxy type="systemcomposer.services.proxy.ProxySource" uuid="b1191482-5ec3-4868-b041-d52e35694e01">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="24b2c545-1664-41b2-83e1-d69cabcd715a"/>
               <realElement type="systemcomposer.property.Value" uuid="92eab917-b6f8-45bd-a7e8-6797f3eb2be0"/>
@@ -1158,7 +1158,7 @@
           <ownedType type="systemcomposer.property.FloatType" uuid="773f4dc3-59b4-4875-83a6-3c05b30b8046">
             <min>0.0</min>
             <unitChecker type="systemcomposer.property.UnitQueryClientWrapper" uuid="025be04f-bbb2-4b65-9cba-3d61f692ce85"/>
-            <units>t</units>
+            <units>m</units>
             <typeProxy type="systemcomposer.services.proxy.ProxySource" uuid="4d5b18e8-dd4c-453d-9ebf-7282985d6012">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="7b585054-8430-4925-88b0-9d6fa7a49ddf"/>
               <realElement type="systemcomposer.property.FloatType" uuid="773f4dc3-59b4-4875-83a6-3c05b30b8046"/>
@@ -1641,4 +1641,5 @@
       <TargetId>ffdd2163-d579-4e8a-9f62-fc862ce1ba1d</TargetId>
     </Proxies>
   </systemcomposer.services.proxy.ModelResolver>
+  <systemcomposer.services.proxy.WorkspaceWrapper type="systemcomposer.services.proxy.WorkspaceWrapper" uuid="19713cde-1412-4c92-97fd-1af0beb30642"/>
 </MF0>
