@@ -861,7 +861,7 @@
         <properties type="systemcomposer.property.PropertyDefinition" uuid="acb6fdf6-2ab8-465b-a2fe-e4d7d4580ba9">
           <currentVersionId>130f75a7-5952-4688-a80f-39456637905d</currentVersionId>
           <p_Index>10</p_Index>
-          <p_Name>TriFluid</p_Name>
+          <p_Name>TerFluid</p_Name>
           <defaultValue type="systemcomposer.property.Value" uuid="31e7eb20-dc72-42c2-8f85-94227749a001">
             <valueTypeProxy type="systemcomposer.services.proxy.ProxySource" uuid="7a57f9d2-a9ba-40a8-b8d4-3477f6bd6a6f">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="ce451e12-4339-40c3-acf0-38270e6c82fe"/>
