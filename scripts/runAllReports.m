@@ -12,13 +12,11 @@ fprintf('==================================================================\n\n'
 
 runnerPath = fileparts(mfilename('fullpath'));
 
-fprintf('Runner Location:\n%s\n\n', runnerPath);
+fprintf('Project Root Initialized:\n%s\n\n', runnerPath);
 
 
 % Add plugin folder
 pluginPath = fullfile(runnerPath,'plugins');
-
-fprintf('Plugin Location:\n%s\n\n', pluginPath);
 
 if isfolder(pluginPath)
 
@@ -39,7 +37,6 @@ modelName = 'SYSTEM';
 
 fprintf('Loading System Composer Model: %s\n\n', modelName);
 
-
 try
 
     if ~bdIsLoaded(modelName)
@@ -47,8 +44,6 @@ try
     end
 
     systemcomposer.loadModel(modelName);
-
-    fprintf('[SUCCESS] Model Loaded\n\n');
 
 catch ME
 
@@ -59,46 +54,108 @@ end
 
 
 
-%% Reports To Run
+%% REPORT 1
 
-reports = {
-    'systemsReport.mlx'
-    'verifyRequirementAllocations.mlx'
-    'fuelAnalysis.mlx'
-    'generateInterfaceReport.mlx'
-    'GenerateWeightTableReport.mlx'
-};
+fprintf('------------------------------------------------------------\n');
+fprintf('RUNNING REPORT 1/5: System Report\n');
+fprintf('------------------------------------------------------------\n');
 
+try
 
+    systemsReport();
 
-%% Execute Reports
+    fprintf('[SUCCESS] System Report Complete\n\n');
 
-for i = 1:length(reports)
+catch ME
 
-    fprintf('------------------------------------------------------------\n');
-    fprintf('RUNNING REPORT %d/%d: %s\n', i, length(reports), reports{i});
-    fprintf('------------------------------------------------------------\n');
-
-
-    try
-
-        run(reports{i});
-
-        fprintf('[SUCCESS] %s Complete\n\n', reports{i});
-
-
-    catch ME
-
-        fprintf('[FAILED] %s\n', reports{i});
-        fprintf('%s\n\n', ME.message);
-
-    end
+    fprintf('[FAILED] System Report:\n%s\n\n', ME.message);
 
 end
 
 
 
-%% Complete
+%% REPORT 2
+
+fprintf('------------------------------------------------------------\n');
+fprintf('RUNNING REPORT 2/5: Requirement Allocation Verification\n');
+fprintf('------------------------------------------------------------\n');
+
+try
+
+    verifyRequirementAllocations();
+
+    fprintf('[SUCCESS] Requirement Verification Complete\n\n');
+
+catch ME
+
+    fprintf('[FAILED] Requirement Verification:\n%s\n\n', ME.message);
+
+end
+
+
+
+%% REPORT 3
+
+fprintf('------------------------------------------------------------\n');
+fprintf('RUNNING REPORT 3/5: Fuel Analysis\n');
+fprintf('------------------------------------------------------------\n');
+
+try
+
+    fuelAnalysis();
+
+    fprintf('[SUCCESS] Fuel Analysis Complete\n\n');
+
+catch ME
+
+    fprintf('[FAILED] Fuel Analysis:\n%s\n\n', ME.message);
+
+end
+
+
+
+%% REPORT 4
+
+fprintf('------------------------------------------------------------\n');
+fprintf('RUNNING REPORT 4/5: Interface Report\n');
+fprintf('------------------------------------------------------------\n');
+
+try
+
+    reportTable = generateInterfaceReport();
+
+    fprintf('[SUCCESS] Interface Report Complete\n\n');
+
+catch ME
+
+    fprintf('[FAILED] Interface Report:\n%s\n\n', ME.message);
+
+end
+
+
+
+%% REPORT 5
+
+fprintf('------------------------------------------------------------\n');
+fprintf('RUNNING REPORT 5/5: Weight Report\n');
+fprintf('------------------------------------------------------------\n');
+
+try
+
+    weightTable = GenerateWeightTableReport();
+
+    fprintf('[SUCCESS] Weight Report Complete\n');
+    fprintf('Components Reported: %d\n\n', height(weightTable));
+
+catch ME
+
+    fprintf('[FAILED] Weight Report:\n%s\n\n', ME.message);
+
+end
+
+
+
+%% COMPLETE
 
 fprintf('==================================================================\n');
 fprintf('                 ALL REPORTS COMPLETE                             \n');
