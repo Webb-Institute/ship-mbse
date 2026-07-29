@@ -1,0 +1,25 @@
+
+==================================================================
+                        FUEL SYSTEM REPORT                          
+==================================================================
+
+Component : 52X (FUEL)
+Sub-Components : 10 found
+
+
+==================================================================
+                         ASSIGNMENT REPORT                          
+==================================================================
+| Property         | Calculated Total | Old Parent Val   | Assignment   |
+|------------------|------------------|------------------|--------------|
+| CoolConsumption  | 19.0000          | 19               | [V] UPDATED  |
+| FlowRate         | 9.0000           | 9                | [V] UPDATED  |
+| HeatConsumed     | 2.0000           | 2                | [V] UPDATED  |
+| LCG              | 43.1298          | 43.1298          | [V] UPDATED  |
+| LubeConsumption  | 6.5000           | 6.5              | [V] UPDATED  |
+| PowerRequired    | 29.0000          | 29               | [V] UPDATED  |
+| TCG              | -0.0901          | -0.0901          | [V] UPDATED  |
+| VCG              | 12.0790          | 12.079           | [V] UPDATED  |
+| WasteOilProduced | 0.5000           | 0.5              | [V] UPDATED  |
+| Weight           | 239.6100         | 239.61           | [V] UPDATED  |
+==================================================================

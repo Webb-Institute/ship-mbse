@@ -1,0 +1,96 @@
+
+==================================================================
+     PHYSICAL CONNECTIONS PROPERTY VALIDATION (LOCAL LEVEL)       
+==================================================================
+
+LINK FOUND: (520-521FO):  520 (FUEL INTAKE/RETURN) <---> 521 (FUEL STORAGE)
+      INFO: None of the target properties were shared by both components.
+
+LINK FOUND: (520-528C):  520 (FUEL INTAKE/RETURN) <---> 528 (FO CONTROL)
+      INFO: None of the target properties were shared by both components.
+
+LINK FOUND: (521-522FO):  521 (FUEL STORAGE) <---> 522 (FUEL TRANSFER)
+  [V] PASSED: PriFluid matches ("Heavy Fuel Oil")
+  [V] PASSED: SecFluid matches ("JP-5")
+  [V] PASSED: TerFluid matches ("Marine Diesel Oil")
+
+LINK FOUND: (521-528C):  521 (FUEL STORAGE) <---> 528 (FO CONTROL)
+      INFO: None of the target properties were shared by both components.
+
+LINK FOUND: (522-523FO):  522 (FUEL TRANSFER) <---> 523 (FUEL CONDITIONING)
+  [V] PASSED: PriFlowRate matches ("5")
+  [V] PASSED: PriFluid matches ("Heavy Fuel Oil")
+  [V] PASSED: SecFlowRate matches ("3")
+  [V] PASSED: SecFluid matches ("JP-5")
+  [V] PASSED: TerFlowRate matches ("1")
+  [V] PASSED: TerFluid matches ("Marine Diesel Oil")
+
+LINK FOUND: (522-528C):  522 (FUEL TRANSFER) <---> 528 (FO CONTROL)
+      INFO: None of the target properties were shared by both components.
+
+LINK FOUND: (529-522P):  522 (FUEL TRANSFER) <---> 529 (FO POWER DISTRIBUTION)
+      INFO: None of the target properties were shared by both components.
+
+LINK FOUND: (523-524FO):  523 (FUEL CONDITIONING) <---> 524 (FUEL DISTRIBUTION)
+  [V] PASSED: PriFlowRate matches ("5")
+  [V] PASSED: PriFluid matches ("Heavy Fuel Oil")
+  [V] PASSED: SecFlowRate matches ("3")
+  [V] PASSED: SecFluid matches ("JP-5")
+  [V] PASSED: TerFlowRate matches ("1")
+  [V] PASSED: TerFluid matches ("Marine Diesel Oil")
+
+LINK FOUND: (523-528C):  523 (FUEL CONDITIONING) <---> 528 (FO CONTROL)
+      INFO: None of the target properties were shared by both components.
+
+LINK FOUND: (529-523P):  523 (FUEL CONDITIONING) <---> 529 (FO POWER DISTRIBUTION)
+      INFO: None of the target properties were shared by both components.
+
+LINK FOUND: (524-528C):  524 (FUEL DISTRIBUTION) <---> 528 (FO CONTROL)
+      INFO: None of the target properties were shared by both components.
+
+LINK FOUND: (529-524P):  524 (FUEL DISTRIBUTION) <---> 529 (FO POWER DISTRIBUTION)
+      INFO: None of the target properties were shared by both components.
+
+LINK FOUND: (524-525FO):  525 (ME FO PIPING) <---> 524 (FUEL DISTRIBUTION)
+  [V] PASSED: Pipe fluid "Heavy Fuel Oil" matches a [524 (FUEL DISTRIBUTION)] fluid profile.
+
+LINK FOUND: (525-520FO):  525 (ME FO PIPING) <---> 520 (FUEL INTAKE/RETURN)
+
+LINK FOUND: (525-528C):  525 (ME FO PIPING) <---> 528 (FO CONTROL)
+
+LINK FOUND: (524-526FO):  526 (GS FO PIPING) <---> 524 (FUEL DISTRIBUTION)
+  [V] PASSED: Pipe fluid "Marine Diesel Oil" matches a [524 (FUEL DISTRIBUTION)] fluid profile.
+
+LINK FOUND: (526-520FO):  526 (GS FO PIPING) <---> 520 (FUEL INTAKE/RETURN)
+
+LINK FOUND: (526-528C):  526 (GS FO PIPING) <---> 528 (FO CONTROL)
+
+LINK FOUND: (524-527FO):  527 (MISSION FO PIPING) <---> 524 (FUEL DISTRIBUTION)
+  [V] PASSED: Pipe fluid "JP-5" matches a [524 (FUEL DISTRIBUTION)] fluid profile.
+
+LINK FOUND: (527-520FO):  527 (MISSION FO PIPING) <---> 520 (FUEL INTAKE/RETURN)
+
+LINK FOUND: (527-528C):  527 (MISSION FO PIPING) <---> 528 (FO CONTROL)
+
+LINK FOUND: (528-529C):  528 (FO CONTROL) <---> 529 (FO POWER DISTRIBUTION)
+      INFO: None of the target properties were shared by both components.
+
+==================================================================
+                    COMPONENT STATUS SUMMARY                      
+==================================================================
+| Component Name                      | Status                    |
+|-------------------------------------|---------------------------|
+| 520 (FUEL INTAKE/RETURN)            | N/A (No Status Prop)      |
+| 521 (FUEL STORAGE)                  | N/A (No Status Prop)      |
+| 528 (FO CONTROL)                    | true                      |
+| 522 (FUEL TRANSFER)                 | true                      |
+| 523 (FUEL CONDITIONING)             | true                      |
+| 529 (FO POWER DISTRIBUTION)         | N/A (No Status Prop)      |
+| 524 (FUEL DISTRIBUTION)             | true                      |
+| 525 (ME FO PIPING)                  | true                      |
+| 526 (GS FO PIPING)                  | true                      |
+| 527 (MISSION FO PIPING)             | true                      |
+
+==================================================================
+SUCCESS: All active physical connections pass property validation.
+==================================================================
