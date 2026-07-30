@@ -2,7 +2,7 @@ function tests = test_fuelEndurance
     tests = functiontests(localfunctions);
 end
 
-function test_FuelSupplyVersusDemand(testCase)
+function test_UsableFuelInventoryEndurance(testCase)
     modelName = 'SYSTEM';
     
     % Checks if Model is Open, and opens the model if it is closed
