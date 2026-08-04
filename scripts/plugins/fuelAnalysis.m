@@ -5,6 +5,13 @@ function fuelAnalysis()
     % =========================================================================
     modelName   = 'SYSTEM';
     profileName = 'FuelComponentProfile';
+    outputDir = 'Reports';
+
+    % Ensure output directory exists
+    if ~exist(outputDir, 'dir')
+        mkdir(outputDir);
+    end
+
     
     % Open and Load Model
     if ~bdIsLoaded(modelName)
@@ -226,13 +233,13 @@ function fuelAnalysis()
 
     propsToCompare = ["PriFluid", "SecFluid", "TerFluid", "PriFlowRate", "SecFlowRate", "TerFlowRate"];
     outputFileName = "FuelValidationReport.txt";
-
+    outputFilePath = fullfile(outputDir,outputFileName);
     numComps = length(compAll);
 
     % Open file for writing (clears previous run)
-    fileID = fopen(outputFileName, 'w');
+    fileID = fopen(outputFilePath, 'w');
     if fileID == -1
-        error('Could not open file %s for writing.', outputFileName);
+        error('Could not open file %s for writing.', outputFilePath);
     end
 
     % Cleanup object to safely close file handle even if an error occurs
@@ -536,7 +543,7 @@ function fuelAnalysis()
         writeLog('NOTE: %d link(s) were NOT established because at least one connected component was inactive (Status = false).\n', blockedLinkCount);
     end
     writeLog('==================================================================\n');
-    fprintf('Report saved to: %s\n\n', fullfile(pwd, outputFileName));
+    fprintf('Report saved to: %s\n\n', fullfile(outputDir, outputFileName));
    
     % =========================================================================
     % 6. ROLLUP CONFIGURATION: OPERATION TYPES & PARENT PROPERTY PATHS
@@ -573,11 +580,12 @@ function fuelAnalysis()
 
     % Output logging setup
     summaryFileName = "FuelSystemSummary.txt";
+    summaryFilePath =  fullfile(outputDir,summaryFileName);
     fileID_summary = -1;
 
     try
-        fileID_summary = fopen(summaryFileName, 'w');
-        if fileID_summary == -1, error('Could not open file %s', summaryFileName); end
+        fileID_summary = fopen(summaryFilePath, 'w');
+        if fileID_summary == -1, error('Could not open file %s', summaryFilePath); end
 
         writeLogSummary = @(fmt, varargin) (fprintf(fmt, varargin{:}) + fprintf(fileID_summary, fmt, varargin{:}));
 
@@ -782,7 +790,7 @@ function fuelAnalysis()
         end
 
         writeLogSummary('==================================================================\n');
-        fprintf('Summary report saved to: %s\n\n', fullfile(pwd, summaryFileName));
+        fprintf('Summary report saved to: %s\n\n', fullfile(outputDir, summaryFileName));
 
     catch ME
         rethrow(ME);
