@@ -2,12 +2,14 @@ function verifyRequirementAllocations()
     
     reqSetName = 'ShipRequirements';
     sysComposerModel = 'SYSTEM';
+    outputDir = 'Reports';
     outputFileName = 'UnallocatedReq.txt';
+    filePath = fullfile(outputDir, outputFileName);
     
     % Open output text file for writing
-    fid = fopen(outputFileName, 'w');
+    fid = fopen(filePath, 'w');
     if fid == -1
-        error('Could not open file %s for writing. Check permissions.', outputFileName);
+        error('Could not open file %s for writing. Check permissions.', filePath);
     end
     
     % Automatically close the file on function completion or error
