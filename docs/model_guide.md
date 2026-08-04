@@ -24,5 +24,8 @@ their own unique tens digit. The last digit in all subsystems is replaced by an 
 This is so that subsystems can be added later for greater model accuracy without
 necessitating drastic changes to the architecture. For an understanding of the
 specific numerical codes and their meanings, as well as a breakdown of the information
-contained within the tags on each connection, please see the glossary.
+contained within the tags on each connection, please see the glossary. It should be noted that
+the model was designed at the current level for generality and simplicity. For example, hydraulic
+systems are assumed to be local components within sub systems that utilize them, not an independent s
+system.
 
