@@ -1,16 +1,9 @@
 function tests = test_cAir
+%TEST_CAIR Verifies REQ-113 Compressed Air Service: capacity that is on covers demand that is on.
 tests = functiontests(localfunctions);
 end
 
 function test_CompAirSupplyVersusDemand(testCase)
-% 1. Define values
-
-[airReq, ~] =sumPropIfOn('AirConsumed', 'AirConsumer', 'CompAirProfile');
-[airGen, ~] =sumPropIfOn('AirProduced', 'AirProducer', 'CompAirProfile');
-
-
-% 2. Use the test framework assertion
-verifyGreaterThanOrEqual(testCase, airGen, airReq, ...
-    'Insufficient Compressed Air Supply');
-
+st = shipmbse.config().Stereotypes;
+verifyServiceBalance(testCase, st.AirConsumer + ".AirConsumed", st.AirProducer + ".AirProduced", "Compressed air");
 end

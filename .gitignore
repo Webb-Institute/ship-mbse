@@ -7,6 +7,7 @@ codegen/
 *.slxc
 octave-workspace
 work/
+.buildtool/
 # NOTE: resources/project/ and *.prj are MATLAB Project metadata and MUST be tracked.
 
 # --- OS ---
@@ -28,6 +29,9 @@ outputs/tables/*
 !outputs/tables/.gitkeep
 outputs/case_study/*
 !outputs/case_study/.gitkeep
+outputs/snapshots/*
+!outputs/snapshots/.gitkeep
+outputs/test-results/
 
 # --- Legacy report folder (reports now go to outputs/reports) ---
 Reports/

@@ -42,9 +42,10 @@ The ship-mbse architecture framework runs in MATLAB R2026a with System Composer,
 The project root directory is organized into standardized modular folders:
 
 * /model/: System Composer model (`/model/system_composer/SYSTEM.slx` and its link set `SYSTEM~mdl.slmx`), profile definition files (/model/profiles/), requirement sets (/model/requirements/), and exported views.  
-* /scripts/: Entry points `runAllTests.m` and `runAllReports.m`; automation utilities (/scripts/utilities/); report and analysis scripts (/scripts/plugins/); requirement verification tests (/scripts/tests/).  
+* /scripts/: Entry points `runAllTests.m` and `runAllReports.m`; the shared package (/scripts/+shipmbse/); read-only reports (/scripts/analysis/); model-changing utilities (/scripts/build/); legacy wrappers (/scripts/utilities/); requirement verification tests (/scripts/tests/) and code tests (/scripts/tests/unit/).  
+* buildfile.m: build tasks (`buildtool`); see Section 6.4.  
 * /data/: Input Excel configurations (/data/input\_tables/Properties.xlsx and FuelProp.xlsx), trade study parameters, and saved analysis results.  
-* /outputs/: Generated output. All reports are written to `outputs/reports/` (resolved by `getOutputDir`, independent of the current folder). Contents are not committed.  
+* /outputs/: Generated output (not committed): `reports/`, `figures/`, `snapshots/` (for change impact), `test-results/` (JUnit, coverage).  
 * /handoff/: Known issues, future work, and maintenance logs (e.g. `traceability_repair_2026-10.md`).  
 * InterfaceDictionary.sldd: Interface data dictionary. **Not yet attached to SYSTEM.slx**: the model currently uses its own local interfaces (see Section 3).  
 * /work/: Simulink cache and code generation folders (created locally, not committed).
@@ -54,7 +55,7 @@ The project root directory is organized into standardized modular folders:
 1. Open MATLAB R2026a.  
 2. Open the project: double-click `ship-mbse.prj`, or run `openProject("<path to repo>")`. This puts every model, requirement, data, and script folder on the path. No manual `addpath` is needed.  
 3. Use the project shortcuts (Project tab): **Open SYSTEM (master model)**, **Configure ship variants**, **Rebuild properties from Excel**, **Run all tests**, **Run all reports**.  
-4. From the command line: `runAllTests` runs the test suite; `runAllReports` writes all reports to `outputs/reports/`.
+4. From the command line: `buildtool` runs the code checks and tests; `buildtool verify` runs the requirement verification tests; `runAllReports` writes all reports to `outputs/reports/` (see Section 6).
 
 When you add a file, add it to the project too (right-click > Add to Project). The project's integrity checks (Project tab > Run Checks) must pass before you commit.
 
@@ -176,111 +177,74 @@ Metadata assignment is split into high-level system profiles (Properties.xlsx) a
 | Pipe | Diameter (m), Length (m), FlowRate (kL/s), FluidDensity (kg/kL), Fluid (string) |
 | FluidConditioner | HeatConsumed (kW), WasteOilProduced (kL/s), Pri/Sec/TerFlowRate (kL/s) |
 
-## **6\. Custom Helper Functions,  Utilities & Reports**
+## **6\. Scripts: Shared Package, Analyses, Build Utilities**
 
-This utility suite automates naval architecture calculations (displacement and Center of Gravity) and aggregates stereotype properties and parameters across the SYSTEM model composer architecture.
+All scripts follow three rules:
 
-### **6.1 Mass Properties & Hydrostatics**
+1. **One traversal.** Every report, analysis and test enumerates components through `shipmbse.activeComponents`. It returns every component in the *active configuration*, at every level, with each variant represented by its **active choice**. Variant containers are never returned, and inactive choices are skipped. This is the only definition of "the configuration" that totals may use.
+2. **Analyses never modify the model.** Anything in `scripts/analysis/` only reads. Anything that changes the model or link sets lives in `scripts/build/` and says so in its help.
+3. **No hard-coded names.** The model name, component paths, stereotype names and Excel file names live in `shipmbse.config`.
 
-#### **calcShipDisp\_CoG**
+Run `help <function>` for full syntax.
 
-* **Syntax:** \[displacement, LCG, VCG, TCG\] \= calcShipDisp\_CoG(stereotypeName, profileName)  
-* **Description:** Calculates total ship displacement (weight) and Center of Gravity coordinates (LCG, VCG, TCG) by traversing active components in the architecture.  
-* **Inputs:** stereotypeName (string | char): Name of the stereotype defining mass properties; profileName (string | char): Profile containing the target stereotype.  
-* **Outputs:** displacement (double): Total weight accumulated from matching active components; LCG, VCG, TCG (double): Longitudinal, Vertical, and Transverse Center of Gravity.  
-* **Key Details:** Uses a recursive nested function (getActiveComponentsRecursive) to bypass inactive variant selections and evaluate active variant choices. Evaluates property paths formatted as Profile.Stereotype.Weight, LCG, VCG, and TCG.
+### **6.1 Shared package (`scripts/+shipmbse/`)**
 
-#### **marginCalcShipDisp\_CoG**
+| Function | Purpose |
+| :--- | :--- |
+| `config` | Central names: model, requirement set, component paths (Simulink block paths; a `/` inside a name is written `//`), stereotypes, Excel files, fuel consumer → pipe map |
+| `loadModel` | Load the architecture model without opening an editor |
+| `activeComponents` | The traversal (see rule 1). Options: `LeavesOnly`, `Stereotype`, `AllVariantChoices` (for traceability only, never for totals) |
+| `allComponents` | Every component including containers and inactive choices. **Build utilities only** |
+| `getProp`, `propertyInfo` | Typed property values, units from the profile, and a flag when a value still equals the profile default |
+| `sumProperty` | Sum a property over the configuration, optionally only components whose `Status` is on; returns per-component details |
+| `serviceBalance` | Demand vs. capacity (margin) per domain: electrical, fuel, lube, cooling, air, heat, waste streams |
+| `massProperties` | Weight and LCG/VCG/TCG with and without margin; missing centres are excluded from the CoG and reported, never silently dropped |
+| `fuelEndurance`, `durationToDays` | Endurance per fuel type in days, with unit conversion (kL ÷ kL/s → s → days) |
+| `interfaceConnections` | Leaf-to-leaf connections traced through composite and variant boundaries |
+| `traceability` | Requirement ↔ architecture (Implement links) and requirement ← test (Verify links) coverage |
+| `findStereotypeOverlaps` | Components that share a stereotype with a descendant (double-count risk) |
+| `linkedRequirements`, `reqValue` | Requirement(s) a test verifies; strict reading of `Threshold`, `Units`, `RequiredComponent` attributes |
+| `snapshot` | Capture configuration, balances, mass and endurance for change-impact comparison |
+| `reportFile`, `sortByModelId`, `pathLeaf` | Report file numbering, ordering by model ID, splitting block paths |
 
-* **Syntax:** \[displacementWithMargin, LCG, VCG, TCG\] \= marginCalcShipDisp\_CoG(stereotypeName, profileName)  
-* **Description:** Calculates displacement and Center of Gravity coordinates while applying design weight margins to each individual component.  
-* **Key Details:** Reads the WeightMargin property and factors it into component weight: Weight\_factored \= Weight \* (1 \+ Margin / 100\). Uses findElementsOfType(modelObj, 'Component') to search components across the model.
+The legacy functions `sumProp`, `sumPropIfOn`, `calcShipDisp_CoG`, `marginCalcShipDisp_CoG` and `getFuelSystemEndurance` (`scripts/utilities/`) keep their original signatures and are thin wrappers over the package.
 
-### **6.2 Property & Parameter Aggregation Utilities**
+### **6.2 Analyses (`scripts/analysis/`, read-only)**
 
-#### **sumParam**
+| Script | Output (`outputs/reports/`) |
+| :--- | :--- |
+| `systemsReport` | `SystemsReport_Run_NNN.txt`: demand, capacity and margin per domain; shortfalls flagged |
+| `generateWeightTableReport` | `WeightsAndMarginsReport_Run_NNN.txt`: component weights and ship totals with and without margin |
+| `verifyRequirementAllocations` | `TraceabilityReport.txt` |
+| `fuelAnalysis` | `FuelAnalysisReport.txt`: connection checks inside the fuel system, and the children's roll-up compared with the fuel system's own values |
+| `generateInterfaceReport` | `InterfaceReport.txt`: leaf-to-leaf connections by interface; interface mismatches |
+| `changeImpactReport` | `Change_Impact_<a>_vs_<b>.txt` and a figure, comparing two snapshots |
+| `electricalTesting` | Command-window margin and utilization check |
 
-* **Syntax:** \[ParamValueSum, numCompFound\] \= sumParam(targetParamName)  
-* **Description:** Finds and sums a specific numerical parameter across all model components. Automatically parses character/string parameter values by splitting text on spaces to strip unit suffixes.
+`runAllReports` runs all of them, saves a snapshot to `outputs/snapshots/`, and errors if any report failed. To see what a design change did: run `runAllReports`, change the model, run it again, then `changeImpactReport`.
 
-#### **sumProp**
+### **6.3 Build utilities (`scripts/build/`, modify the model)**
 
-* **Syntax:** \[PropValueSum, numCompFound\] \= sumProp(targetPropName, targetStereotypeName, targetProfileName)  
-* **Description:** Sums a specific stereotype property across active architecture components using recursive hierarchy traversal. For VariantComponent blocks, it bypasses inactive containers and evaluates getActiveChoice().
+| Script | What it changes |
+| :--- | :--- |
+| `configureShip(Name=Value)` | Active variant choices for propulsion and fuel; saves |
+| `applyProperties(file)`, `stripProperties`, `rebuildProperties` | Stereotypes and property values from the Excel tables |
+| `applyPortProp` | Port profile and interfaces inferred from port names; saves |
+| `propagatePipeFluids` | Copies each fuel consumer's `FuelType` onto its supply pipe's `Fluid`; saves |
+| `updateTestLinkRanges` | Re-anchors each test's requirement link to its test function after the file was edited outside the MATLAB Editor |
 
-#### **sumPropIfOn**
+### **6.4 Build tasks (`buildfile.m`)**
 
-* **Syntax:** \[PropValueSumON, numCompFoundON\] \= sumPropIfOn(targetPropName, targetStereotypeName, targetProfileName)  
-* **Description:** Sums a stereotype property value across active components, strictly filtering for components whose Status property evaluates to true/ON.
+| Command | Runs |
+| :--- | :--- |
+| `buildtool` | `check` + `test` (default) |
+| `buildtool check` | Code Analyzer over `scripts/`; any warning fails |
+| `buildtool test` | Code tests (`scripts/tests/unit`): package unit tests against the MiniShip fixture and the SYSTEM regression baseline; JUnit and coverage in `outputs/test-results/` |
+| `buildtool verify` | Requirement verification tests (`scripts/tests`) |
+| `buildtool trace` | Traceability audit; fails on unresolved links or unimplemented requirements |
+| `buildtool reports` | `runAllReports` |
 
-### **6.3 Automation Scripts**
-
-* applyProperties(excelFileName): Reads component property definitions and stereotypes from a specified Excel spreadsheet and applies them across model components, variant containers, and variant choices.  
-* applyPortProp(): Automatically attaches PortProfile, traverses all architecture levels, resolves port interfaces based on naming conventions, assigns stereotypes/properties, creates missing Interface Dictionary entries, and synchronizes connected port endpoints.
-
-### 
-
-### **6.4 Report Scripts**
-
-#### **fuelAnalysis**
-
-* **Syntax:** fuelAnalysis()  
-* **Description:** Automates fuel property propagation, checks local physical connection compatibility, and performs hierarchical property rollups for vessel fuel systems. Aggregates child metrics (e.g., Power, Weight, Flow Rate, Center of Gravity) onto parent container properties using operations such as `SUM` and `COG`.Evaluates physical links at the `52X (FUEL)` architectural level to verify active status, matching fluid profiles, and standard target properties.  
-* **Outputs:** FuelValidationReport.txt and FuelSystemSummary.txt.
-
-#### **generateInterfaceReport()**
-
-* **Syntax:** reportTable \= generateInterfaceReport()  
-* **Description:** Traverses architecture boundary connectors and variant structures to map end-to-end leaf component connections and extract interface metrics.  
-* **Boundary & Variant Tracing:** Deep-scans through architecture ports and active variant choices to identify true leaf source and target components.  
-* **Metadata Extraction:** Cleans interface specifications (stripping `_S`/`_P` suffixes) and queries criticality/redundancy scores using dynamic stereotype lookups.  
-* **Data Deduplication:** Eliminates duplicate paths, formats, and sorts connection records by interface number and component name.  
-* **Outputs:** Interfaces.txt
-
-#### **systemsReport()**
-
-* **Syntax:** systemsReport()  
-* **Description:** Generates multi-domain balance and usage reports across primary vessel engineering systems.  
-* **Domain Analysis:** Computes consumer and producer totals for Electrical, Fuel, Lube Oil, Freshwater Cooling, Compressed Air, and Waste profiles.  
-* **Variant Filtering:** Filters out inactive variants prior to totaling domain values.  
-* **Multi-Stream Processing:** Uses a specialized layout to evaluate multi-stream waste systems (Gas, Oil, Water, Solid).  
-* **Run Management:** Supports automatic report run indexing (e.g., `Run_001`) and clearing prior reports via a `'clear'` command argument.  
-* **Outputs:**Auto-incremented text reports formatted as `outputs/reports/SystemsReport_Run_XXX.txt`
-
-#### **GenerateWeightTableReport()**
-
-* **Syntax:** weightTable \= GenerateWeightTableReport(cmd)  
-* **Description:** Extracts weight distributions, design margins, and 3D spatial Center of Gravity (CoG) coordinates to summarize vessel displacement.  
-* **Component Weight Extraction:** Retrieves base weights, percentage margins, total margins, and 3D CoG coordinates (LCG, TCG, VCG) for active components.  
-* **Global Hydrostatics Summary:** Calculates total vessel displacement and global Center of Gravity coordinates, providing figures both with and without design margins.  
-* **Report Indexing:** Automatically manages output file numbering and supports directory clearing.  
-* **Outputs:**Auto-incremented text reports formatted as `outputs/reports/WeightsAndMarginsReport_Run_XXX.txt`
-
-#### **verifyRequirementAllocations()**
-
-* **Syntax:** verifyRequirementAllocations()  
-* **Description:** Performs bi-directional allocation verification between a Simulink Requirements set and a System Composer model to identify unallocated requirements and components.  
-* **Requirements Coverage Analysis:** Traverses requirement trees in ShipRequirements to confirm links to system components and sorts unallocated requirements numerically by ID.  
-* **Component Coverage Analysis:** Recursively fetches model components across all hierarchy levels, verifying allocation links while resolving parent variant component inheritance.  
-* **Dual Output Logging:** Prints structured coverage metrics and list summaries simultaneously to the MATLAB Command Window and an output text file.  
-* **Outputs:** `outputs/reports/UnallocatedReq.txt`
-
-#### **runAllReports()**
-
-* **Syntax:** runAllReports()  
-* **Description:**  Functions as the master orchestrator script that initializes the project environment and sequentially executes all analysis tools.  
-* **Environment Initialization:** Configures workspace paths, adds the `/plugins` directory, and loads the target System Composer model.  
-* **Sequential Batch Execution:** Automates execution of 5 primary analyses in order: systemsReport, verifyRequirementAllocations, fuelAnalysis, generateInterfaceReport, and GenerateWeightTableReport.  
-* **Fault-Tolerant Processing:** Wraps each individual report call in a `try-catch` block to prevent individual script errors from halting the entire batch suite.  
-* **Outputs:** Execution progress logs and artifacts produced by each sub-report script.
-
-#### **changeImpactReport**
-
-* **Syntax:** changeImpactReport(optArg)  
-* **Description:** Serves as an interactive script for assessing, visualizing, and documenting the impact of proposed architectural changes across system components.  
-* **Interactive Live Analysis:** Combines executable MATLAB code, embedded visual outputs, and dynamic rich-text formatting into a single Live Script interface.  
-* **Dependency & Change Impact Tracing:** Evaluates modifications to model elements to determine downstream effects on connected components, interfaces, and system parameters.  
-* **Outputs:** Comparative report and graphs, optionally clears the report memory upon completion.
+A `test` failure means the tools are wrong. A `verify` failure means the *design* does not meet a requirement with its current data. That's why the two are separate gates.
 
 ## **7\. Adding Components, Ports, Connections & Metadata Assignment**
 
@@ -313,129 +277,81 @@ The automated script applyPortProp() parses port names using a standardized mult
 **Standard Development Workflow**
 
 1. Create the System Composer component.  
-2. Add appropriate component stereotypes and properties to the Excel properties sheet.  
-3. Populate component properties using the Excel property sheets.  
-4. Execute applyProperties().  
-5. Allocate requirements using Simulink Requirements.  
-6. Develop or update MATLAB verification tests.  
-7. Execute verifyRequirementAllocations().  
-8. Execute all regression tests before committing changes.
+2. Add its stereotypes and property values to the Excel property tables.  
+3. Run `rebuildProperties` (or `applyProperties(file)`) and save the model.  
+4. Allocate requirements to it (Implement links) in the Requirements Editor.  
+5. Add or update verification tests (Section 8.4).  
+6. Run `buildtool` (checks and code tests), `buildtool verify trace`, and `runAllReports`.  
+7. If the change intentionally alters analysis results, update the expected values in `scripts/tests/unit/test_regressionBaseline.m` in the same commit and say why.
 
-## **8\. Requirements Management, Verification Testing & Custom Registries**
+## **8\. Requirements, Traceability & Verification Tests**
 
-The ship-mbse framework utilizes Simulink Requirements (.slreqx) integrated with System Composer architecture models to enforce bi-directional traceability, custom metadata tracking, and automated model testing.
+Requirements live in `model/requirements/ShipRequirements.slreqx`. Three kinds of links connect them to the rest of the repository:
 
-### **8.1 Bi-Directional Requirement Allocation Verification**
+| Link type | From | Stored in | Meaning |
+| :--- | :--- | :--- | :--- |
+| Implement | Architecture component | `model/system_composer/SYSTEM~mdl.slmx` | The component allocates/implements the requirement |
+| Verify | Test function | `scripts/tests/<test>~m.slmx` | The test verifies the requirement |
 
-To ensure structural completeness across the architecture, the framework includes an automated bi-directional allocation verification utility: verifyRequirementAllocations.m.
+### **8.1 Traceability audit**
 
-#### **Function Overview & Execution**
+`verifyRequirementAllocations` (or `buildtool trace`) reports:
+- every requirement that needs allocation (not Container/Informational) with no implementing component;
+- which requirements are verified by a test;
+- every component, across **all variant choices**, that implements no requirement;
+- unresolved links.
 
-Executing verifyRequirementAllocations() performs a two-way coverage check between the requirement set (ShipRequirements.slreqx) and the System Composer architecture model (SYSTEM.slx):
+A variant choice counts as allocated if it or its variant container has an Implement link.
 
-* **Part 1 (Requirements → Components Allocation Check):** Recursively traverses all requirements in ShipRequirements.slreqx, evaluating incoming and outgoing links. Identifies any requirement that is not allocated to at least one architecture component.  
-* **Part 2 (Components → Requirements Allocation Check):** Traverses the complete model hierarchy using getAllComponents(). Reads component qualified paths, evaluates links, and flags any architectural component that is not allocated to at least one requirement.  
-* **Report Generation:** Displays an executive summary in the Command Window and writes a detailed audit report to `outputs/reports/UnallocatedReq.txt`.
+### **8.2 Requirement attributes**
 
-% Run bi-directional allocation verification check
+The requirement set defines these custom attributes:
 
-verifyRequirementAllocations();
+| Attribute | Type | Use |
+| :--- | :--- | :--- |
+| `Threshold` | text, must be a number | Value the design must meet (e.g. REQ-402: `100`) |
+| `Objective` | text, must be a number | Desired value |
+| `Units` | text | Units of Threshold/Objective (e.g. `day`, `%`) |
+| `VerificationMethod` | list | Analysis, Demonstration, Inspection, Test |
+| `RequiredComponent` | text | Component that must exist and be active (existence checks) |
 
-### **8.2 Requirement Verification Test Suite (/scripts/tests/)**
+Requirements Toolbox has no numeric attribute type. `shipmbse.reqValue` therefore parses `Threshold`/`Objective` **strictly**: `"100"` is 100, while `"100 days"`, `""` and `"REQ-406"` are errors. With `Units=...` it also checks the requirement's units.
 
-Verification tests are automated MATLAB unit test scripts located in the /scripts/tests/ directory. These scripts evaluate model properties, parameters, and dynamic capabilities against system requirements, asserting pass/fail conditions.
+### **8.3 Verification tests (`scripts/tests/`)**
 
-### **Analysis of Standard Framework Tests**
+| Test | Verifies | Check |
+| :--- | :--- | :--- |
+| `test_elec`, `test_fuel`, `test_lube`, `test_cooling`, `test_cAir` | REQ-103, 111, 110, 109, 113 | Capacity that is on ≥ demand that is on (`verifyServiceBalance`). Fails if no demand component is on or if units differ |
+| `test_ExistComp_01` | REQ-104 | The `RequiredComponent` exists and is in the active configuration |
+| `test_Req_FuelEndurance_01` | REQ-402 | Fuel endurance ≥ `Threshold` days |
+| `test_Req_FuelEndurance_02` | REQ-403 | Endurance ≥ REQ-402 days × (1 + `Threshold` %) |
 
-| Test Script | Target Subsystem | Verification Logic & Operational Assessment |
-| :---: | :---: | :---: |
-| test\_fuel.m | **52X Fuel Oil** | Aggregates total active fuel demand (FuelRequired) and active fuel generation capacity (FuelProduced) across all energized components |
-| test\_ExistComp\_01.m | **Any Component** | Checks if a component needed to fulfill a requirement exists or is the selected variant choice (verifies REQ-104) |
-| test\_Req\_FuelEndurance\_01.m | **521 Fuel Storage / Endurance** | Uses getLinkedPerfVal to extract the required operational endurance threshold (PerfVal1) from its linked requirement (REQ-402). Computes actual vessel endurance with getFuelSystemEndurance and verifies that it meets or exceeds the threshold. |
-| test\_elec / test\_cooling / test\_lube / test\_cAir | **Supply vs. demand** | Sum active producer capacity and consumer demand and check supply ≥ demand (verify REQ-103, REQ-109, REQ-110, REQ-113) |
+Current verdicts (October 2026, placeholder data): REQ-402 and REQ-403 **fail** (endurance 5.79 days vs. 100 required). All others pass.
 
-> **Known issues (October 2026):**
-> * The requirement set has **no custom attributes yet**, so `PerfVal1` cannot be read. `test_ExistComp_01` and both `test_Req_FuelEndurance` tests fail until the attributes are added and populated.
-> * `test_Req_FuelEndurance_02` verifies REQ-403 Reserve Fuel Quantity: endurance must cover the REQ-402 period plus the reserve percentage.
-> * The supply-vs-demand tests pass vacuously if no matching components are found.
->
-> See `handoff/known_issues.md`.
+### **8.4 Writing and linking a new verification test**
 
-### **8.3 Custom Attribute Registries & Dynamic Variable Passing**
+1. Create `scripts/tests/test_<name>.m` with **one** test function:
 
-Custom attribute registries in Simulink Requirements allow engineers to define custom metadata fields on requirement objects (or requirement link objects). In the ship-mbse framework, custom attributes such as PerfVal1, PerfVal2, or ThresholdValue are used to store quantitative design criteria directly inside the requirement set.
-
-#### **Setting Variables for Verification Tests via Attributes**
-
-Instead of hardcoding threshold values (e.g., specifying 14 days endurance) inside MATLAB test scripts, threshold variables are defined as custom attributes within the requirement registry. Test scripts query these attributes dynamically at runtime. This decouples verification logic from specific numerical requirements.
-
-#### **Custom Attribute Extraction Script: getLinkedPerfVal.m**
-
-The helper function getLinkedPerfVal.m extracts attribute values from requirements or links connected to a specific test script:
-
-* **Inputs:** testFileName (name of calling test script) and attrName (target attribute, e.g., 'PerfVal1').  
-* **Requirement Auto-Loading:** Automatically scans the working folder and loads all available requirement sets (.slreqx) and link sets (.slmx) into memory.  
-* **Link Traversal:** Queries slreq.inLinks and slreq.outLinks to locate links connected to the calling test script.  
-* **Attribute Resolution:** Inspects the custom attributes on the link object. If unassigned, it falls back to inspecting the connected source or destination requirement object.  
-* **Type Parsing:** Safe-parses numeric, logical, or string values (using regular expressions to strip non-numeric characters) and returns double-precision perfVal.
-
-% Extract threshold value inside a test script
-
-perfValThreshold \= getLinkedPerfVal(mfilename, 'PerfVal1');
-
-### 
-
-### 
-
-### **8.4 Authoring Tests & Requirement Linking Workflow**
-
-#### **1\. Authoring New Test Scripts**
-
-New verification tests must follow the MATLAB Function-Based Unit Test structure:
-
-function tests \= test\_Req\_NewFeature
-
-    tests \= functiontests(localfunctions);
-
+```matlab
+function tests = test_ElecMargin
+%TEST_ELECMARGIN Verifies REQ-xxx: generation margin >= Threshold %.
+tests = functiontests(localfunctions);
 end
 
-function test\_FeaturePerformanceCriteria(testCase)
-
-    % 1\. Dynamically read required threshold from linked requirement
-
-    requiredThreshold \= getLinkedPerfVal(mfilename, 'PerfVal1');
-
-    testCase.assertFalse(isnan(requiredThreshold), 'PerfVal1 attribute missing from requirement link.');
-
-    
-
-    % 2\. Query model state
-
-    actualValue \= sumPropIfOn('PowerRequired', 'ElectricalConsumer', 'ElectricalProfile');
-
-    
-
-    % 3\. Verify requirement condition
-
-    testCase.verifyLessThanOrEqual(actualValue, requiredThreshold, ...
-
-   sprintf('Requirement FAILED: Power draw (%.2f kW) exceeds limit (%.2f kW).', actualValue, requiredThreshold));
-
+function test_GenerationMargin(testCase)
+[minMargin, req] = shipmbse.reqValue(mfilename, "Threshold", Units="%");
+r = electricalTesting(minMargin);
+testCase.verifyGreaterThanOrEqual(r.MarginPct, minMargin, ...
+    sprintf("%s not met: margin %.1f%% < %.1f%%.", req.Id, r.MarginPct, minMargin));
 end
+```
 
-#### **2\. Linking Test Scripts to Requirements**
+2. Put the threshold on the requirement (`Threshold`, `Units`, `VerificationMethod`), not in the test.
+3. Link the test to the requirement: in the MATLAB Editor, select the test function, then in the Requirements Editor right-click the requirement and choose **Link to Selection in MATLAB Editor**. Set the link type to **Verify**. Keep one requirement per test file.
+4. If you later edit a linked test outside the MATLAB Editor, run `updateTestLinkRanges` so the link stays on the test function.
+5. Run `buildtool verify trace`.
 
-To establish traceability between a test script and a requirement in Simulink Requirements:
-
-1. Open the test script file (e.g., test\_Req\_FuelEndurance\_01.m) in the MATLAB Editor.  
-2. Highlight the entire script text inside the Editor window (or select the main test function).  
-3. Open the Requirements Editor (or Requirements Perspective overlay in System Composer).  
-4. Select the target requirement in the tree view.  
-5. Right-click the requirement or click **Add Link** → select **Link to Selection in Editor**.
-
-**Granular Testing Best Practice (1-to-1 Test-to-Requirement Mapping)**
-
-If the same underlying test logic (e.g., evaluating fuel endurance or electrical load) applies to multiple requirements with differing custom attribute thresholds, create separate test scripts for each requirement (e.g., test\_Req\_FuelEndurance\_01.m, test\_Req\_FuelEndurance\_02.m). Linking each test script exclusively to a single requirement ensures that test results immediately isolate which specific requirement and custom attribute threshold caused a test failure, eliminating ambiguity during model audits.
+Code tests for the scripts themselves go in `scripts/tests/unit/`. New `shipmbse` functions need tests against the MiniShip fixture (`buildMiniShip`), whose expected values are worked out by hand.
 
 ## **9\. Recommendations for Future Work**
 

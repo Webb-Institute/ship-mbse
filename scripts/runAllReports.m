@@ -1,166 +1,49 @@
-function runAllReports()
+function status = runAllReports()
+%RUNALLREPORTS Run every report and save an analysis snapshot.
+%   status = runAllReports() runs, in order: systemsReport,
+%   generateWeightTableReport, verifyRequirementAllocations, fuelAnalysis
+%   and generateInterfaceReport, then saves a snapshot of the active
+%   configuration (outputs/snapshots) for changeImpactReport. Every report
+%   runs even if an earlier one fails; returns a table of outcomes and
+%   errors at the end if any report failed.
+%
+%   None of these reports modifies the model. Open the ship-mbse project
+%   first.
+%
+%   See also changeImpactReport, shipmbse.snapshot.
 
-clc
+reports = {
+    "Systems report",      @() systemsReport();
+    "Weight report",       @() generateWeightTableReport();
+    "Traceability report", @() verifyRequirementAllocations();
+    "Fuel analysis",       @() fuelAnalysis();
+    "Interface report",    @() generateInterfaceReport();
+    "Snapshot",            @() shipmbse.snapshot(Save=true) };
+
+n = size(reports, 1);
+status = table(string(reports(:, 1)), strings(n, 1), zeros(n, 1), ...
+    'VariableNames', {'Report', 'Result', 'Seconds'});
+fprintf('Running %d reports on model "%s"...\n', n, shipmbse.config().ModelName);
+for k = 1:n
+    fprintf('\n--- %s ---\n', reports{k, 1});
+    t = tic;
+    try
+        reports{k, 2}();
+        status.Result(k) = "OK";
+    catch err
+        status.Result(k) = "FAILED: " + err.message;
+        fprintf(2, '%s FAILED: %s\n', reports{k, 1}, err.message);
+    end
+    status.Seconds(k) = toc(t);
+end
 
 fprintf('\n');
-fprintf('==================================================================\n');
-fprintf('                 SHIP MBSE REPORT GENERATOR                        \n');
-fprintf('==================================================================\n\n');
-
-
-%% Setup Paths
-
-runnerPath = fileparts(mfilename('fullpath'));
-
-fprintf('Project Root Initialized:\n%s\n\n', runnerPath);
-
-
-% Add plugin and utility folders (plugins depend on utilities)
-pluginPath = fullfile(runnerPath,'plugins');
-utilityPath = fullfile(runnerPath,'utilities');
-
-if isfolder(pluginPath) && isfolder(utilityPath)
-
-    addpath(pluginPath, utilityPath);
-
-else
-
-    fprintf('FAILED: Plugin or utility folder not found under:\n%s\n', runnerPath);
-    return
-
+disp(status);
+failed = ~startsWith(status.Result, "OK");
+if any(failed)
+    error("runAllReports:Failed", "%d of %d reports failed: %s", sum(failed), n, ...
+        strjoin(status.Report(failed), ", "));
 end
-
-
-
-%% Load Model
-
-modelName = 'SYSTEM';
-
-fprintf('Loading System Composer Model: %s\n\n', modelName);
-
-try
-
-    if ~bdIsLoaded(modelName)
-        open_system(modelName);
-    end
-
-    systemcomposer.loadModel(modelName);
-
-catch ME
-
-    fprintf('FAILED TO LOAD MODEL:\n%s\n\n', ME.message);
-    return
-
-end
-
-
-
-%% REPORT 1
-
-fprintf('------------------------------------------------------------\n');
-fprintf('RUNNING REPORT 1/5: System Report\n');
-fprintf('------------------------------------------------------------\n');
-
-try
-
-    systemsReport();
-
-    fprintf('[SUCCESS] System Report Complete\n\n');
-
-catch ME
-
-    fprintf('[FAILED] System Report:\n%s\n\n', ME.message);
-
-end
-
-
-
-%% REPORT 2
-
-fprintf('------------------------------------------------------------\n');
-fprintf('RUNNING REPORT 2/5: Requirement Allocation Verification\n');
-fprintf('------------------------------------------------------------\n');
-
-try
-
-    verifyRequirementAllocations();
-
-    fprintf('[SUCCESS] Requirement Verification Complete\n\n');
-
-catch ME
-
-    fprintf('[FAILED] Requirement Verification:\n%s\n\n', ME.message);
-
-end
-
-
-
-%% REPORT 3
-
-fprintf('------------------------------------------------------------\n');
-fprintf('RUNNING REPORT 3/5: Fuel Analysis\n');
-fprintf('------------------------------------------------------------\n');
-
-try
-
-    fuelAnalysis();
-
-    fprintf('[SUCCESS] Fuel Analysis Complete\n\n');
-
-catch ME
-
-    fprintf('[FAILED] Fuel Analysis:\n%s\n\n', ME.message);
-
-end
-
-
-
-%% REPORT 4
-
-fprintf('------------------------------------------------------------\n');
-fprintf('RUNNING REPORT 4/5: Interface Report\n');
-fprintf('------------------------------------------------------------\n');
-
-try
-
-    reportTable = generateInterfaceReport();
-
-    fprintf('[SUCCESS] Interface Report Complete\n\n');
-
-catch ME
-
-    fprintf('[FAILED] Interface Report:\n%s\n\n', ME.message);
-
-end
-
-
-
-%% REPORT 5
-
-fprintf('------------------------------------------------------------\n');
-fprintf('RUNNING REPORT 5/5: Weight Report\n');
-fprintf('------------------------------------------------------------\n');
-
-try
-
-    weightTable = GenerateWeightTableReport();
-
-    fprintf('[SUCCESS] Weight Report Complete\n');
-    fprintf('Components Reported: %d\n\n', height(weightTable));
-
-catch ME
-
-    fprintf('[FAILED] Weight Report:\n%s\n\n', ME.message);
-
-end
-
-
-
-%% COMPLETE
-
-fprintf('==================================================================\n');
-fprintf('                 ALL REPORTS COMPLETE                             \n');
-fprintf('==================================================================\n\n');
-
+fprintf('All %d reports completed. Output: %s\n', n, getOutputDir("reports"));
 
 end
