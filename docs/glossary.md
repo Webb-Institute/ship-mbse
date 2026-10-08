@@ -34,7 +34,7 @@ The number identification will fall into the following categories:
 | 600 | Outfit and Furnishings |
 | 700 | Armament |
 
-The specific identification numbers are as follows:
+The specific identification numbers are as follows. These are **model IDs, not Navy ESWBS numbers**: the same digits can mean a different system in ESWBS. See [`eswbs_mapping.md`](eswbs_mapping.md).
 
 | Number | Definition |
 |------|------------|

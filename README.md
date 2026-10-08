@@ -68,6 +68,7 @@ ship-mbse/
 | [`docs/developer_guide.md`](docs/developer_guide.md) | Setup, architecture, profiles, utilities, reports, requirements and testing workflow |
 | [`docs/model_guide.md`](docs/model_guide.md) | How the System Composer model is organized |
 | [`docs/glossary.md`](docs/glossary.md) | Terms, model ID numbering, connection naming convention |
+| [`docs/eswbs_mapping.md`](docs/eswbs_mapping.md) | Model ID → Navy ESWBS mapping, with number-collision warnings |
 | [`docs/plugin_guide.md`](docs/plugin_guide.md) | Report and analysis scripts |
 | [`docs/assumptions_and_limits.md`](docs/assumptions_and_limits.md) | Modeling assumptions and limitations |
 | [`docs/case_study_guide.md`](docs/case_study_guide.md) | Reference case study (planned) |
