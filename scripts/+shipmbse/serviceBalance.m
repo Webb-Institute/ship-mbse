@@ -3,7 +3,9 @@ function [results, details] = serviceBalance(model)
 %   results = shipmbse.serviceBalance() returns one row per domain
 %   (electrical, fuel, lube, cooling, compressed air, heat, and each waste
 %   stream) with Demand, NumDemand, Capacity, NumCapacity, Margin, Unit and
-%   Shortfall, summing only active components whose Status is on.
+%   Shortfall, Modeled, summing only active components whose Status is on.
+%   A domain whose profile is not attached to the model is returned with
+%   Modeled = false and NaN values.
 %   Margin = capacity - demand, so a negative margin is a shortfall in every
 %   domain. For waste streams the producers are the demand and the
 %   receivers are the capacity.
@@ -33,12 +35,21 @@ domains = ["ELECTRICAL",     st.ElectricalConsumer + ".PowerRequired",  st.Elect
            "WASTE SOLID",    st.WasteSolidProducer + ".WSProduced",     st.WasteReceiver + ".WSReceived",           "WASTE PRODUCERS",  "WASTE RECEIVERS"];
 
 n = size(domains, 1);
-results = table('Size', [n 8], ...
-    'VariableTypes', {'string', 'double', 'double', 'double', 'double', 'double', 'string', 'logical'}, ...
-    'VariableNames', {'Domain', 'Demand', 'NumDemand', 'Capacity', 'NumCapacity', 'Margin', 'Unit', 'Shortfall'});
+results = table('Size', [n 9], ...
+    'VariableTypes', {'string', 'double', 'double', 'double', 'double', 'double', 'string', 'logical', 'logical'}, ...
+    'VariableNames', {'Domain', 'Demand', 'NumDemand', 'Capacity', 'NumCapacity', 'Margin', 'Unit', 'Shortfall', 'Modeled'});
+attached = string({model.Profiles.Name});
 details = struct('Domain', cell(n, 1), 'DemandProperty', [], 'CapacityProperty', [], ...
     'DemandLabel', [], 'CapacityLabel', [], 'Demand', [], 'Capacity', []);
 for d = 1:n
+    profiles = extractBefore([domains(d, 2), domains(d, 3)], ".");
+    if ~all(ismember(profiles, attached))
+        results(d, :) = {domains(d, 1), NaN, 0, NaN, 0, NaN, "", false, false};
+        details(d) = struct('Domain', domains(d, 1), 'DemandProperty', domains(d, 2), ...
+            'CapacityProperty', domains(d, 3), 'DemandLabel', domains(d, 4), ...
+            'CapacityLabel', domains(d, 5), 'Demand', table(), 'Capacity', table());
+        continue
+    end
     [demand, dDet] = shipmbse.sumProperty(domains(d, 2), OnlyIfOn=true, Model=model);
     [capacity, cDet] = shipmbse.sumProperty(domains(d, 3), OnlyIfOn=true, Model=model);
     dUnit = shipmbse.propertyInfo(domains(d, 2), model).Units;
@@ -49,7 +60,7 @@ for d = 1:n
         margin = NaN;   % units differ: no margin without conversion
     end
     results(d, :) = {domains(d, 1), demand, sum(dDet.Included), capacity, sum(cDet.Included), ...
-        margin, cUnit, margin < 0};
+        margin, cUnit, margin < 0, true};
     details(d) = struct('Domain', domains(d, 1), 'DemandProperty', domains(d, 2), ...
         'CapacityProperty', domains(d, 3), 'DemandLabel', domains(d, 4), ...
         'CapacityLabel', domains(d, 5), 'Demand', dDet, 'Capacity', cDet);

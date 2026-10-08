@@ -42,6 +42,10 @@ fprintf(fid, "Margin = capacity - demand; a negative margin is a shortfall.\n");
 
 for d = 1:numel(details)
     fprintf(fid, "\n\n%s\n%s\n", centre(details(d).Domain, width), repmat('-', 1, width));
+    if ~results.Modeled(d)
+        fprintf(fid, "Not modeled: the profile for this domain is not attached to the model.\n");
+        continue
+    end
     unit = results.Unit(d);
     printSection(fid, "DEMAND: " + details(d).DemandLabel, details(d).DemandProperty, ...
         details(d).Demand, results.Demand(d), width);

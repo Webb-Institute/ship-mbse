@@ -26,7 +26,7 @@ if cmd ~= ""
     return
 end
 
-runNums = str2double(regexp(string({existing.name}), prefix + "_Run_(\d+)\.txt", "tokens", "once"));
+runNums = str2double(extractBetween(string({existing.name}), prefix + "_Run_", ".txt"));
 nextNum = max([0, runNums(~isnan(runNums))]) + 1;
 fileName = fullfile(outputDir, sprintf("%s_Run_%03d.txt", prefix, nextNum));
 

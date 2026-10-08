@@ -25,7 +25,7 @@ model = opts.Model;
 folder = getOutputDir("snapshots");
 if label == ""
     existing = dir(fullfile(folder, "Snapshot_Run_*.mat"));
-    nums = str2double(regexp(string({existing.name}), "Snapshot_Run_(\d+)\.mat", "tokens", "once"));
+    nums = str2double(extractBetween(string({existing.name}), "Snapshot_Run_", ".mat"));
     label = sprintf("Run_%03d", max([0, nums(~isnan(nums))]) + 1);
 end
 
