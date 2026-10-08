@@ -13,8 +13,9 @@
 *.plprj binary
 *.sbproj binary
 *.sfx binary
-*.sldd binary
+*.sldd binary merge=mlAutoMerge
 *.slreqx binary merge=mlAutoMerge
+*.prj text eol=lf
 *.slmx binary merge=mlAutoMerge
 *.sltx binary
 *.slxc binary
