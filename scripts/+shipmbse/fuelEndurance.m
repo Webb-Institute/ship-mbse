@@ -13,7 +13,9 @@ function [days, byFuel, consumers] = fuelEndurance(model)
 %   Storage source:
 %     * Tank components (FuelComponentProfile.Tank): capacity per fluid from
 %       the Primary/Secondary/Tertiary fluid and capacity properties.
-%       Consumers draw only on tanks holding their FuelType.
+%       Consumers draw only on tanks holding their FuelType. Tank volumes
+%       (m^3) are converted to mass (t) with shipmbse.config().FluidDensity
+%       when demand is a mass rate (t/h).
 %     * Otherwise FuelProducer.FuelStored, treated as one pool usable by all
 %       fuel types.
 %
@@ -69,6 +71,20 @@ if ~isempty(tanks)
         end
     end
     storageUnit = shipmbse.propertyInfo(st.Tank + ".PrimaryFluidCapacity", model).Units;
+    rateQuantityUnit = extractBefore(rateUnit, "/");
+    if storageUnit == "m^3" && rateQuantityUnit == "t"
+        % Tank volumes -> fuel mass with the nominal density of each fluid
+        density = shipmbse.config().FluidDensity;
+        fluids = keys(storage);
+        for k = 1:numel(fluids)
+            if ~isKey(density, fluids(k))
+                error("shipmbse:fuelEndurance:NoDensity", ...
+                    "No density for fluid ""%s""; add it to shipmbse.config().FluidDensity.", fluids(k));
+            end
+            storage(fluids(k)) = storage(fluids(k)) * density(fluids(k));
+        end
+        storageUnit = "t";
+    end
     pooled = false;
 else
     [pool, pDet] = shipmbse.sumProperty(st.FuelProducer + ".FuelStored", Model=model);

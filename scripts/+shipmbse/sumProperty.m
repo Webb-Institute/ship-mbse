@@ -6,7 +6,10 @@ function [total, details] = sumProperty(propPath, opts)
 %
 %   [total, details] = shipmbse.sumProperty(...) also returns a table with
 %   one row per component carrying the stereotype:
-%     Path, Value, Unit, IsDefault, StatusOn, Included
+%     Path, Value, Unit, IsDefault, StatusOn, Missing, Included
+%   Missing is true when the value is NaN (never entered: numeric profile
+%   defaults are NaN). Missing values are excluded from the total, never
+%   counted as zero; check sum(details.Missing).
 %
 %   Name-value options:
 %     OnlyIfOn   (false) Include only components whose Status property in
@@ -49,14 +52,15 @@ for k = 1:n
     end
 end
 
+missing = isnan(value);
 if opts.OnlyIfOn
-    included = statusOn;
+    included = statusOn & ~missing;
 else
-    included = true(n, 1);
+    included = ~missing;
 end
 total = sum(value(included));
 
-details = table(paths, value, repmat(info.Units, n, 1), isDefault, statusOn, included, ...
-    'VariableNames', {'Path', 'Value', 'Unit', 'IsDefault', 'StatusOn', 'Included'});
+details = table(paths, value, repmat(info.Units, n, 1), isDefault, statusOn, missing, included, ...
+    'VariableNames', {'Path', 'Value', 'Unit', 'IsDefault', 'StatusOn', 'Missing', 'Included'});
 
 end
