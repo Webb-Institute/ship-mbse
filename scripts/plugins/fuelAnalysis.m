@@ -5,7 +5,7 @@ function fuelAnalysis()
     % =========================================================================
     modelName   = 'SYSTEM';
     profileName = 'FuelComponentProfile';
-    outputDir = 'Reports';
+    outputDir = getOutputDir('reports');
 
     % Ensure output directory exists
     if ~exist(outputDir, 'dir')

@@ -14,7 +14,7 @@ function changeImpactReport(optArg)
     % =========================================================================
     % CONFIGURATION & FILE DISCOVERY
     % =========================================================================
-    reportsDir = 'Reports';
+    reportsDir = getOutputDir('reports');
 
     if ~exist(reportsDir, 'dir')
         error('Directory "%s" does not exist. Run report generation first.', reportsDir);
