@@ -1,23 +1,25 @@
 function applyProperties(filename)
-    % Necessary for the findElementsOfType command later in the script
-    import systemcomposer.query.*
+%APPLYPROPERTIES Apply stereotypes and property values from an Excel table.
+%   applyProperties(filename) reads a property table (row 1 profile, row 2
+%   stereotype, row 3 property, row 4 units, rows 5+ component name and
+%   values; "N/A" = not applied) and applies the stereotypes and values to
+%   the matching components of the model named in shipmbse.config. Values
+%   given for a variant container are applied to every one of its choices.
+%   This MODIFIES THE MODEL.
+%
+%   See also rebuildProperties, stripProperties.
 
-    modelName = 'SYSTEM';
+    modelName = shipmbse.config().ModelName;
     rawCellData = readcell(filename, 'Range', 'A1');
     profileNames = rawCellData(1, 2:end);
     stereotypeNames = rawCellData(2, 2:end);
     propertyNames = rawCellData(3, 2:end);
     componentNames = rawCellData(5:end, 1);
 
-    if ~bdIsLoaded(modelName)
-        open_system(modelName);
-    end
+    modelObj = shipmbse.loadModel(modelName);
 
-    % Creating Model Object
-    modelObj = systemcomposer.loadModel(modelName);
-
-    % findElementsOfType returns standard components & VariantComponent objects
-    compAll = findElementsOfType(modelObj, 'Component');
+    % Every component, including variant containers and all choices
+    compAll = shipmbse.allComponents(modelObj);
 
     % ---------------- EFFICIENT ELEMENT INDEXING ----------------
     % Build a unique list of all model elements, including individual variant choices

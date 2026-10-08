@@ -1,11 +1,11 @@
 function configureShip()
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% SHIP CONFIGURATION SCRIPT
+%CONFIGURESHIP Select the propulsion and fuel-system variant choices, then save.
+%   configureShip() sets the active choices of the propulsion (20X-23X) and
+%   fuel (52X, 525-527) variant components from the settings in the USER
+%   CONFIGURATION section below, and saves the model. This MODIFIES THE
+%   MODEL. Edit the settings, then run.
 %
-% Configures System Composer variants for ship architecture selection
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   See also shipmbse.config.
 
 
 %% ================= USER CONFIGURATION ================================
@@ -55,26 +55,12 @@ MissionFuel = true;
 
 %% ================= LOAD MODEL =========================================
 
-model = systemcomposer.loadModel("SYSTEM");
-
-root = model.Architecture;
-
-
-
-%% ================= GET SHIP ===========================================
-
-ship = root.Components(...
-    strcmp({root.Components.Name},"SHIP"));
-
-
-shipComponents = ship.OwnedArchitecture.Components;
-
-
+cfg = shipmbse.config();
+model = shipmbse.loadModel(cfg.ModelName);
 
 %% ================= PROPULSION =========================================
 
-propulsion = shipComponents(...
-    strcmp({shipComponents.Name},"200 (PROPULSION)"));
+propulsion = lookup(model, 'Path', cfg.ModelName + "/" + cfg.Paths.Propulsion);
 
 
 propComponents = propulsion.OwnedArchitecture.Components;
@@ -197,15 +183,7 @@ end
 
 %% ================= FUEL SYSTEM =========================================
 
-auxiliary = shipComponents(...
-    strcmp({shipComponents.Name},"500 (AUXILLIARY SYSTEMS)"));
-
-
-auxComponents = auxiliary.OwnedArchitecture.Components;
-
-
-fuel = auxComponents(...
-    strcmp({auxComponents.Name},"52X (FUEL)"));
+fuel = lookup(model, 'Path', cfg.ModelName + "/" + cfg.Paths.Fuel);
 
 
 fuelRequired = MainEngine || DieselGenerators || MissionFuel;
@@ -357,9 +335,3 @@ error("Variant choice not found: %s",choiceName)
 
 
 end
-
-%[appendix]{"version":"1.0"}
-%---
-%[metadata:view]
-%   data: {"layout":"onright"}
-%---

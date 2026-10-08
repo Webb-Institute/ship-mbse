@@ -1,12 +1,16 @@
 function applyPortProp()
-    % System Composer Profile and Interface Assignment Script
-    modelName = 'SYSTEM';
+%APPLYPORTPROP Apply the port profile and assign interfaces from port-name tags.
+%   applyPortProp() attaches PortProfile, applies the Redundancy stereotype
+%   to ports, infers each port's interface from the connection tag at the
+%   end of its name (see docs/glossary.md), creates missing interfaces, and
+%   saves the model named in shipmbse.config. This MODIFIES THE MODEL.
+%
+%   Known issue: any name ending in "C" is treated as Control, and
+%   mismatched interfaces on connected ports are overwritten without a
+%   report (to be replaced by explicit interface assignment).
 
-    if ~bdIsLoaded(modelName)
-        open_system(modelName);
-    end
-
-    modelObj = systemcomposer.loadModel(modelName);
+    modelName = shipmbse.config().ModelName;
+    modelObj = shipmbse.loadModel(modelName);
 
     % 1. Ensure Profile is attached safely
     try

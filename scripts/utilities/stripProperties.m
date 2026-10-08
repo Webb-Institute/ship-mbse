@@ -1,14 +1,13 @@
 function stripProperties()
+%STRIPPROPERTIES Remove every stereotype from every component of the model.
+%   stripProperties() removes all applied stereotypes (and so all property
+%   values) from every component of the model named in shipmbse.config,
+%   including variant containers and inactive choices. Port stereotypes are
+%   not touched. This MODIFIES THE MODEL; it does not save.
+%
+%   See also rebuildProperties, applyProperties.
 
-    import systemcomposer.query.*
-    modelName = 'SYSTEM';
-    if ~bdIsLoaded(modelName)
-        open_system(modelName);
-    end
-
-    % Creating Model Object and Creating an Array of All Components
-    modelObj= systemcomposer.loadModel(modelName);
-    compAll = findElementsOfType(modelObj, 'Component');
+    compAll = shipmbse.allComponents();
 
     % Strips all Stereotypes from each component to reset
     for a = 1:length(compAll)
