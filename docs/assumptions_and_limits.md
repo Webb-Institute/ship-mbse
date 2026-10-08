@@ -19,8 +19,14 @@ scripts. For specific defects, see [`handoff/known_issues.md`](../handoff/known_
 - **Connections:** physical connections between the hull (`10X PLATE`) and each group represent
   structural support (foundations). Signal connections represent mass, energy or information flow
   and are named `<source>-<destination><tag>` (see the glossary).
-- **Operating state:** each stereotype has a boolean `Status` (on/off). Totals sum only active
-  variant choices and, where `Status` is used, only components that are on.
+- **What counts as "the configuration":** every component at every level whose variant choices
+  are active. Each variant is represented by its active choice; variant containers and inactive
+  choices are never counted. Data may sit at more than one level (e.g. `52X FUEL` holds the fuel
+  system's weight while its children hold component data). Totals are only correct if a component
+  and its descendants never carry the same stereotype; `shipmbse.findStereotypeOverlaps` checks this
+  and the regression test enforces it.
+- **Operating state:** each stereotype has a boolean `Status` (on/off). Balances count only
+  components that are on.
 - **Margins:** weight margin is a per-component percentage applied to that component's weight.
 - **Coordinates:** LCG, VCG and TCG are in metres in a single global ship frame. The origin and
   axis conventions (aft perpendicular, baseline, centerline) are not yet formally documented.
@@ -31,7 +37,8 @@ scripts. For specific defects, see [`handoff/known_issues.md`](../handoff/known_
   engineering estimates. Totals, margins and test outcomes are **not meaningful for design
   decisions** yet.
 - **Units:** several flow quantities use kL/s, which doesn't suit fuel, air or waste streams.
-  Units are stored as text in the Excel header and are not converted.
+  Units are defined in the profiles and reported with every value; only time conversion
+  (endurance) is implemented, and balances refuse to compare quantities with different units.
 - **Interfaces** have no elements, so no flow, pressure, temperature, voltage or data content is
   modeled or checked at connections.
 - **No operating conditions** (in-port, transit, mission, emergency). Electrical and fluid

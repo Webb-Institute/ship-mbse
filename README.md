@@ -15,7 +15,9 @@ Early concept architecture, under active cleanup (October 2026).
 - **Requirements:** 122 requirements in `ShipRequirements.slreqx`, allocated to components, all
   links resolving.
 - **Property data** in `data/input_tables/` is **placeholder** and not engineering data.
-- **Tests:** 8 tests. 3 fail by design until requirement custom attributes are added.
+- **Tools:** shared `+shipmbse` package with code tests (96% coverage), Code Analyzer clean.
+- **Verification:** 8 requirement tests; REQ-402/403 (fuel endurance) currently **fail** on the
+  placeholder data (5.8 days vs. 100 required).
 
 See [`handoff/known_issues.md`](handoff/known_issues.md) for current limitations.
 
@@ -32,8 +34,9 @@ MATLAB **R2026a** with:
 
 ```matlab
 openProject("path/to/ship-mbse")   % sets the MATLAB path; or double-click ship-mbse.prj
-runAllTests                        % run the verification test suite
-runAllReports                      % write reports to outputs/reports/
+buildtool                          % code checks + code tests
+buildtool verify trace             % requirement verification tests + traceability audit
+runAllReports                      % all reports to outputs/reports/, plus a snapshot
 ```
 
 Open the model with the project shortcut **Open SYSTEM (master model)**, or run
@@ -51,12 +54,16 @@ ship-mbse/
     exported_views/           Exported diagrams
   InterfaceDictionary.sldd    Interface data dictionary (not yet attached to SYSTEM)
   data/input_tables/          Excel property tables applied to the model
+  buildfile.m                 Build tasks (buildtool)
   scripts/
     runAllTests.m, runAllReports.m   Entry points
-    utilities/                Property application, variant configuration, roll-ups
-    plugins/                  Reports and analyses
+    +shipmbse/                Shared package: traversal, properties, calculations
+    analysis/                 Reports and analyses (read-only)
+    build/                    Utilities that modify the model (properties, variants, ports)
+    utilities/                Legacy wrappers and getOutputDir
     tests/                    Requirement verification tests (+ link sets)
-  outputs/                    Generated reports, tables, figures (not committed)
+    tests/unit/               Code tests (MiniShip fixture, regression baseline)
+  outputs/                    Generated reports, figures, snapshots, test results (not committed)
   docs/                       Documentation
   handoff/                    Known issues, future work, maintenance logs
 ```
@@ -69,7 +76,7 @@ ship-mbse/
 | [`docs/model_guide.md`](docs/model_guide.md) | How the System Composer model is organized |
 | [`docs/glossary.md`](docs/glossary.md) | Terms, model ID numbering, connection naming convention |
 | [`docs/eswbs_mapping.md`](docs/eswbs_mapping.md) | Model ID → Navy ESWBS mapping, with number-collision warnings |
-| [`docs/plugin_guide.md`](docs/plugin_guide.md) | Report and analysis scripts |
+| [`docs/scripts_guide.md`](docs/scripts_guide.md) | Where scripts go and how to add one |
 | [`docs/assumptions_and_limits.md`](docs/assumptions_and_limits.md) | Modeling assumptions and limitations |
 | [`docs/case_study_guide.md`](docs/case_study_guide.md) | Reference case study (planned) |
 | [`handoff/known_issues.md`](handoff/known_issues.md) | Open defects and gaps |
@@ -81,7 +88,8 @@ ship-mbse/
 - Add new files to the project and keep **Project > Run Checks** clean.
 - Commit model (`.slx`) changes in small, focused PRs. Binary model files merge through the
   MATLAB merge tool (`mlAutoMerge`, configured in `.gitattributes`).
-- Report scripts write only to `outputs/`, which is not committed.
+- Analyses never modify the model; model-changing scripts live in `scripts/build/`.
+- Run `buildtool` before committing; Code Analyzer warnings fail the build.
 
 ## License
 
