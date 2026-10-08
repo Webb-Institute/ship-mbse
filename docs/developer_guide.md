@@ -35,25 +35,28 @@ The remaining effort is primarily focused on expanding subsystem models, populat
 
 ## **1\. Toolchain & Repository Setup**
 
-The ship-mbse architecture framework operates within MATLAB R2026a using System Composer, Simulink Projects, and MATLAB Data Dictionaries. All team members must adhere to the standard directory layout and path initialization workflow to ensure reproducible builds and model validation.
+The ship-mbse architecture framework runs in MATLAB R2026a with System Composer, Requirements Toolbox, and Simulink, managed as a MATLAB Project (`ship-mbse.prj`). The project sets the MATLAB path, so always work with the project open.
 
 ### **1.1 Workspace Directory Structure**
 
 The project root directory is organized into standardized modular folders:
 
-* /model/: Core System Composer models, profile definition files (/model/profiles/), requirement sets (/model/requirements/), and exported views.  
-* /scripts/: MATLAB automation utilities (/scripts/utilities/), requirement verification test suites (/scripts/tests/), plug-ins, and helper functions. Main entry-point scripts include setupProjectPaths.m, runAllReports.m, and verifyRequirementAllocations.m.  
+* /model/: System Composer model (`/model/system_composer/SYSTEM.slx` and its link set `SYSTEM~mdl.slmx`), profile definition files (/model/profiles/), requirement sets (/model/requirements/), and exported views.  
+* /scripts/: Entry points `runAllTests.m` and `runAllReports.m`; automation utilities (/scripts/utilities/); report and analysis scripts (/scripts/plugins/); requirement verification tests (/scripts/tests/).  
 * /data/: Input Excel configurations (/data/input\_tables/Properties.xlsx and FuelProp.xlsx), trade study parameters, and saved analysis results.  
-* /outputs/: Generated text reports (SystemsReport.txt, FuelValidationReport.txt, UnallocatedReq.txt), figures, and comparative table exports.  
-* InterfaceDictionary.sldd: Shared data dictionary defining system interfaces and data types.
-
-### 
+* /outputs/: Generated output. All reports are written to `outputs/reports/` (resolved by `getOutputDir`, independent of the current folder). Contents are not committed.  
+* /handoff/: Known issues, future work, and maintenance logs (e.g. `traceability_repair_2026-10.md`).  
+* InterfaceDictionary.sldd: Interface data dictionary. **Not yet attached to SYSTEM.slx**: the model currently uses its own local interfaces (see Section 3).  
+* /work/: Simulink cache and code generation folders (created locally, not committed).
 
 ### **1.2 Project Initialization Workflow**
 
-1. Open MATLAB R2026a and set the current working folder to the repository root.  
-2. Double-click ship-mbse.prj to launch the MATLAB Project environment.  
-3. Execute setupProjectPaths.m in the Command Window to automatically load all required subdirectories and bind InterfaceDictionary.sldd to the active workspace.
+1. Open MATLAB R2026a.  
+2. Open the project: double-click `ship-mbse.prj`, or run `openProject("<path to repo>")`. This puts every model, requirement, data, and script folder on the path. No manual `addpath` is needed.  
+3. Use the project shortcuts (Project tab): **Open SYSTEM (master model)**, **Configure ship variants**, **Rebuild properties from Excel**, **Run all tests**, **Run all reports**.  
+4. From the command line: `runAllTests` runs the test suite; `runAllReports` writes all reports to `outputs/reports/`.
+
+When you add a file, add it to the project too (right-click > Add to Project). The project's integrity checks (Project tab > Run Checks) must pass before you commit.
 
 ## **2\. System Overview & Architecture Hierarchy**
 
@@ -125,7 +128,17 @@ The architecture standardizes all physical and signal connections across system 
 | **Thermal / Power** | Heat\_P, Power\_P | Heat\_S, Power\_S | Heat exchange & electrical generation |
 | **Waste Management** | WasteOil\_P, WasteWater\_P, WasteSolid\_P, WasteGas\_P | WasteOil\_S, WasteWater\_S, WasteSolid\_S, WasteGas\_S | Drainage, bilge, waste processing, and exhaust manifolds |
 
+> **Current status (October 2026):**
+> * The 25 interfaces above (13 physical, 12 data) exist as model-local interfaces in `SYSTEM.slx`, but **none has any elements yet**. They identify a domain but carry no flow, pressure, voltage, or signal content.
+> * `InterfaceDictionary.sldd` is **not attached** to the model and uses different names (e.g. `CompressedAir` rather than `CompAir_P`).
+> * Port *names* do not carry `_P`/`_S` suffixes. `applyPortProp` infers the interface from the connection tag at the end of the port name (see the glossary).
+>
+> Moving the interfaces into the shared dictionary with real elements is planned future work.
+
 ## **4\. Key Architectural Design Rules Refinement**
+
+The rules below are the intended design rules. They are not yet enforced automatically; see the status note in Section 3.
+
 
 * **Strict Bus Domain Typing:** All signal connections between subsystems must bind to their specific \_S connection bus type (e.g., Bus: LubeOil\_S, Bus: Control\_S), ensuring strong type-checking at system boundaries.  
 * **Physical / Signal Separation:** Fluid flow, mechanical load, and thermal transfer are strictly handled via \_P physical bus ports, while monitoring, commands, and telemetry are handled via \_S standard Simulink composite bus ports.  
@@ -232,7 +245,7 @@ This utility suite automates naval architecture calculations (displacement and C
 * **Variant Filtering:** Filters out inactive variants prior to totaling domain values.  
 * **Multi-Stream Processing:** Uses a specialized layout to evaluate multi-stream waste systems (Gas, Oil, Water, Solid).  
 * **Run Management:** Supports automatic report run indexing (e.g., `Run_001`) and clearing prior reports via a `'clear'` command argument.  
-* **Outputs:**Auto-incremented text reports formatted as  Reports/SystemsReport\_Run\_XXX.txt
+* **Outputs:**Auto-incremented text reports formatted as `outputs/reports/SystemsReport_Run_XXX.txt`
 
 #### **GenerateWeightTableReport()**
 
@@ -241,7 +254,7 @@ This utility suite automates naval architecture calculations (displacement and C
 * **Component Weight Extraction:** Retrieves base weights, percentage margins, total margins, and 3D CoG coordinates (LCG, TCG, VCG) for active components.  
 * **Global Hydrostatics Summary:** Calculates total vessel displacement and global Center of Gravity coordinates, providing figures both with and without design margins.  
 * **Report Indexing:** Automatically manages output file numbering and supports directory clearing.  
-* **Outputs:**Auto-incremented text reports formatted as  Reports/WeightsAndMarginsReport\_Run\_XXX.txt
+* **Outputs:**Auto-incremented text reports formatted as `outputs/reports/WeightsAndMarginsReport_Run_XXX.txt`
 
 #### **verifyRequirementAllocations()**
 
@@ -250,7 +263,7 @@ This utility suite automates naval architecture calculations (displacement and C
 * **Requirements Coverage Analysis:** Traverses requirement trees in ShipRequirements to confirm links to system components and sorts unallocated requirements numerically by ID.  
 * **Component Coverage Analysis:** Recursively fetches model components across all hierarchy levels, verifying allocation links while resolving parent variant component inheritance.  
 * **Dual Output Logging:** Prints structured coverage metrics and list summaries simultaneously to the MATLAB Command Window and an output text file.  
-* **Outputs:**Auto-incremented text reports formatted as  UnallocatedReq.txt
+* **Outputs:** `outputs/reports/UnallocatedReq.txt`
 
 #### **runAllReports()**
 
@@ -295,6 +308,8 @@ The automated script applyPortProp() parses port names using a standardized mult
 
 **Domain Suffix Rules (\_P vs \_S):** Appending \_P marks the port as a Physical Port (e.g., CoolingFW\_P). Appending \_S forces the port to be treated as a Data/Signal Port (e.g., Control\_S).
 
+> **Note:** No port in the current model uses the `_P`/`_S` suffix. In practice `applyPortProp` maps the connection tag (e.g. `FO`, `LO`, `C`) to an interface. Any name ending in `C` is treated as Control, so check its results.
+
 **Standard Development Workflow**
 
 1. Create the System Composer component.  
@@ -320,7 +335,7 @@ Executing verifyRequirementAllocations() performs a two-way coverage check betwe
 
 * **Part 1 (Requirements → Components Allocation Check):** Recursively traverses all requirements in ShipRequirements.slreqx, evaluating incoming and outgoing links. Identifies any requirement that is not allocated to at least one architecture component.  
 * **Part 2 (Components → Requirements Allocation Check):** Traverses the complete model hierarchy using getAllComponents(). Reads component qualified paths, evaluates links, and flags any architectural component that is not allocated to at least one requirement.  
-* **Report Generation:** Displays an executive summary in the Command Window and writes a detailed audit report to /outputs/UnallocatedReq.txt.
+* **Report Generation:** Displays an executive summary in the Command Window and writes a detailed audit report to `outputs/reports/UnallocatedReq.txt`.
 
 % Run bi-directional allocation verification check
 
@@ -335,8 +350,16 @@ Verification tests are automated MATLAB unit test scripts located in the /script
 | Test Script | Target Subsystem | Verification Logic & Operational Assessment |
 | :---: | :---: | :---: |
 | test\_fuel.m | **52X Fuel Oil** | Aggregates total active fuel demand (FuelRequired) and active fuel generation capacity (FuelProduced) across all energized components |
-| test\_ExistComp.m | **Any Component** | Checks if a component needed to fulfill a requirement exists or is the selected variant choice |
-| test\_Req\_FuelEndurance\_01.m | **521 Fuel Storage / Endurance** | Uses getLinkedPerfVal to dynamically extract the required operational endurance threshold (PerfVal1) from its linked requirement. Computes actual vessel endurance via and verifies that actual endurance meets or exceeds the threshold. |
+| test\_ExistComp\_01.m | **Any Component** | Checks if a component needed to fulfill a requirement exists or is the selected variant choice (verifies REQ-104) |
+| test\_Req\_FuelEndurance\_01.m | **521 Fuel Storage / Endurance** | Uses getLinkedPerfVal to extract the required operational endurance threshold (PerfVal1) from its linked requirement (REQ-402). Computes actual vessel endurance with getFuelSystemEndurance and verifies that it meets or exceeds the threshold. |
+| test\_elec / test\_cooling / test\_lube / test\_cAir | **Supply vs. demand** | Sum active producer capacity and consumer demand and check supply ≥ demand (verify REQ-103, REQ-109, REQ-110, REQ-113) |
+
+> **Known issues (October 2026):**
+> * The requirement set has **no custom attributes yet**, so `PerfVal1` cannot be read. `test_ExistComp_01` and both `test_Req_FuelEndurance` tests fail until the attributes are added and populated.
+> * `test_Req_FuelEndurance_02` currently has no requirement link (see `handoff/traceability_repair_2026-10.md`).
+> * The supply-vs-demand tests pass vacuously if no matching components are found.
+>
+> See `handoff/known_issues.md`.
 
 ### **8.3 Custom Attribute Registries & Dynamic Variable Passing**
 
@@ -466,7 +489,7 @@ Extend architecture components by linking System Composer blocks to underlying S
 
 1. Read Sections 2–5 to understand the overall architecture.  
 2. Open SYSTEM.slx and explore the SWBS hierarchy.  
-3. Review the Interface Dictionary. *(Note: This section has not been fully developed or implemented)*  
+3. Review the interfaces (Section 3). *(Note: interfaces have no elements yet and the Interface Dictionary is not attached; see the status note.)*  
 4. Examine the stereotype profiles in the Excel property sheets.  
 5. Review helper functions in the scripts directory.  
 6. Execute the automated verification scripts.  
