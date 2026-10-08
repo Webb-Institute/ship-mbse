@@ -14,8 +14,7 @@ Roadmap agreed in October 2026. Each phase builds on the previous one.
 
 0. **Stabilize the repo** (done, October 2026): MATLAB Project as the entry point, plain-text live
    code, single output folder, repaired traceability, documentation triage, ESWBS mapping.
-1. **Correctness** (in progress: shared package, read-only analyses, fixed defects, tests,
-   requirement thresholds and `buildfile` done; units overhaul and Excel ingestion hardening next):
+1. **Correctness** (done, October 2026):
    - Central configuration; one component traversal and one property reader, aware of
      referenced models.
    - Analyses that never modify the model.
