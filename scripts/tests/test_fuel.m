@@ -1,16 +1,9 @@
 function tests = test_fuel
-    tests = functiontests(localfunctions);
+%TEST_FUEL Verifies REQ-111 Fuel Oil Supply: capacity that is on covers demand that is on.
+tests = functiontests(localfunctions);
 end
 
 function test_FuelSupplyVersusDemand(testCase)
-    % 1. Define values
-    
-    [fuelReq, ~] =sumPropIfOn('FuelRequired', 'FuelConsumer', 'FuelProfile');
-    [fuelGen, ~] =sumPropIfOn('FuelProduced', 'FuelProducer', 'FuelProfile');
-   
-
-    % 2. Use the test framework assertion
-    verifyGreaterThanOrEqual(testCase, fuelGen, fuelReq, ...
-        'Insufficient Fuel Oil Supply');
-   
+st = shipmbse.config().Stereotypes;
+verifyServiceBalance(testCase, st.FuelConsumer + ".FuelRequired", st.FuelProducer + ".FuelProduced", "Fuel oil supply");
 end

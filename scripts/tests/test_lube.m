@@ -1,16 +1,9 @@
 function tests = test_lube
+%TEST_LUBE Verifies REQ-110 Lubrication Service: capacity that is on covers demand that is on.
 tests = functiontests(localfunctions);
 end
 
 function test_LubeSupplyVersusDemand(testCase)
-% 1. Define values
-
-[lubeReq, ~] =sumPropIfOn('LubeRequired', 'LubeConsumer', 'LubeProfile');
-[lubeGen, ~] =sumPropIfOn('LubeProduced', 'LubeProducer', 'LubeProfile');
-
-
-% 2. Use the test framework assertion
-verifyGreaterThanOrEqual(testCase, lubeGen, lubeReq, ...
-    'Insufficient Lube Oil Supply');
-
+st = shipmbse.config().Stereotypes;
+verifyServiceBalance(testCase, st.LubeConsumer + ".LubeRequired", st.LubeProducer + ".LubeProduced", "Lube oil supply");
 end

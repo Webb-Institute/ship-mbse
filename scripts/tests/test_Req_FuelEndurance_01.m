@@ -8,7 +8,7 @@ perfValThreshold = getLinkedPerfVal(mfilename, 'PerfVal1');
 testCase.assertFalse(isnan(perfValThreshold), 'PerfVal1 attribute could not be read from requirement link.');
 
 % 2. Get system endurance from model
-actualSystemDays = getFuelSystemEndurance('SYSTEM');
+actualSystemDays = getFuelSystemEndurance();
 
 % 3. Verify requirement condition
 testCase.verifyGreaterThanOrEqual(actualSystemDays, perfValThreshold, ...

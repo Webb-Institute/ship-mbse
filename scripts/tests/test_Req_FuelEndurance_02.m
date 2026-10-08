@@ -15,7 +15,7 @@ operationalDays = getLinkedPerfVal('test_Req_FuelEndurance_01', 'PerfVal1');
 testCase.assertFalse(isnan(operationalDays), 'PerfVal1 (operational days) could not be read from the REQ-402 link.');
 
 % 2. Get system endurance from model
-actualSystemDays = getFuelSystemEndurance('SYSTEM');
+actualSystemDays = getFuelSystemEndurance();
 requiredDays = operationalDays * (1 + reservePct/100);
 
 % 3. Verify requirement condition
