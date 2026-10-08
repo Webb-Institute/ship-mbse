@@ -8,9 +8,10 @@
       <metaAttributes type="mf.zero.meta.AttributeMap" uuid="c20ead93-b65e-41ea-8400-43114ce84a57"/>
       <propertySet type="systemcomposer.property.PropertySet" uuid="6413ca31-bd4b-494a-9e20-4160a5be435f">
         <properties type="systemcomposer.property.PropertyDefinition" uuid="9f5dc7d1-971d-48b0-b551-fe26865e3461">
-          <currentVersionId>bf5f7f09-5280-41e4-851a-6d29694f475c</currentVersionId>
+          <currentVersionId>f352c003-1b4d-4d48-9191-24082566e4eb</currentVersionId>
           <p_Name>CriticalityScore</p_Name>
           <defaultValue type="systemcomposer.property.Value" uuid="9dd1246e-118e-47da-8d51-e9f9edd42473">
+            <storedExpression>NaN</storedExpression>
             <valueTypeProxy type="systemcomposer.services.proxy.ProxySource" uuid="d56c70c3-8a55-4da4-abf8-4b412d42d6b0">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="56e500a5-3ffb-4b47-8b9c-646437603d03"/>
               <realElement type="systemcomposer.property.Value" uuid="9dd1246e-118e-47da-8d51-e9f9edd42473"/>
@@ -44,9 +45,10 @@
       <metaAttributes type="mf.zero.meta.AttributeMap" uuid="89c3cd33-0274-4d56-b0c2-a387432b99c1"/>
       <propertySet type="systemcomposer.property.PropertySet" uuid="b40ae4d8-e2f7-482b-9133-8c5ae10b05dd">
         <properties type="systemcomposer.property.PropertyDefinition" uuid="1940b2d5-9270-4367-a2ca-4b367fabfd02">
-          <currentVersionId>b770e6ef-b022-4e9a-a14b-4cc964944fbd</currentVersionId>
+          <currentVersionId>3383f110-93b7-46be-b744-f5d23e5d9ad9</currentVersionId>
           <p_Name>RedundancyScore</p_Name>
           <defaultValue type="systemcomposer.property.Value" uuid="d05e36a3-770d-4c79-9e90-673f48687201">
+            <storedExpression>NaN</storedExpression>
             <valueTypeProxy type="systemcomposer.services.proxy.ProxySource" uuid="cc7b7677-043d-4985-933b-6f65f703526c">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="a5a6eed1-b639-4789-b8c5-ea55652e14d0"/>
               <realElement type="systemcomposer.property.Value" uuid="d05e36a3-770d-4c79-9e90-673f48687201"/>
@@ -131,9 +133,10 @@
       <metaAttributes type="mf.zero.meta.AttributeMap" uuid="e43cd0ef-2f0f-4590-b115-15315c6a2742"/>
       <propertySet type="systemcomposer.property.PropertySet" uuid="481e10bb-7155-4a12-866d-7fe57a4f912a">
         <properties type="systemcomposer.property.PropertyDefinition" uuid="b8b96803-627c-4c39-bd5c-44b5c5336dc5">
-          <currentVersionId>d5989f83-e1e1-4671-ac05-0d6502cc3d33</currentVersionId>
+          <currentVersionId>695a9cf3-f9f7-48b0-80b1-9b7a055d1c5c</currentVersionId>
           <p_Name>ReliabilityScore</p_Name>
           <defaultValue type="systemcomposer.property.Value" uuid="9eef11d5-a5a6-40f1-a53b-12421027e968">
+            <storedExpression>NaN</storedExpression>
             <valueTypeProxy type="systemcomposer.services.proxy.ProxySource" uuid="80e16825-76c8-4aae-b5a7-362c11d0ea15">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="f7246ef5-6e7e-4f11-bd27-d239779f4922"/>
               <realElement type="systemcomposer.property.Value" uuid="9eef11d5-a5a6-40f1-a53b-12421027e968"/>
@@ -222,11 +225,13 @@
     <p_Name>CritRelRedProfile</p_Name>
     <elemProxy type="systemcomposer.services.proxy.ProxyTarget" uuid="2e229049-9768-491b-ae3d-df60e3342f6e"/>
   </systemcomposer.profile.Profile>
+  <systemcomposer.property.UnitQueryClientWrapper type="systemcomposer.property.UnitQueryClientWrapper" uuid="7c3b6c16-8b56-46e9-bda8-857edeb07f0b"/>
+  <systemcomposer.services.proxy.WorkspaceWrapper type="systemcomposer.services.proxy.WorkspaceWrapper" uuid="bcf68d79-3255-4cb2-b0ed-f2e18b58f771"/>
   <systemcomposer.services.proxy.ModelIdentifier type="systemcomposer.services.proxy.ModelIdentifier" uuid="747b636e-07a9-4460-850f-b49ef4c80596">
     <URI>CritRelRedProfile</URI>
     <modelType>PROFILE_MODEL</modelType>
   </systemcomposer.services.proxy.ModelIdentifier>
-  <systemcomposer.property.UnitQueryClientWrapper type="systemcomposer.property.UnitQueryClientWrapper" uuid="7c3b6c16-8b56-46e9-bda8-857edeb07f0b"/>
+  <systemcomposer.services.proxy.WorkspaceWrapper type="systemcomposer.services.proxy.WorkspaceWrapper" uuid="10539d7c-93d5-4490-8fa8-eb22cd6ab378"/>
   <systemcomposer.services.proxy.ModelResolver type="systemcomposer.services.proxy.ModelResolver" uuid="082ad7ea-aaac-4a70-8222-bb20ce7892e6">
     <Proxies type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="56e500a5-3ffb-4b47-8b9c-646437603d03">
       <Source type="systemcomposer.services.proxy.ProxySource" uuid="d56c70c3-8a55-4da4-abf8-4b412d42d6b0"/>
@@ -280,6 +285,7 @@
       <TargetId>ef36bd1c-17f2-41ee-b418-24daafb46716</TargetId>
     </Proxies>
   </systemcomposer.services.proxy.ModelResolver>
-  <systemcomposer.services.proxy.WorkspaceWrapper type="systemcomposer.services.proxy.WorkspaceWrapper" uuid="10539d7c-93d5-4490-8fa8-eb22cd6ab378"/>
   <systemcomposer.services.proxy.WorkspaceWrapper type="systemcomposer.services.proxy.WorkspaceWrapper" uuid="65bbdbbd-cafa-4c74-aa26-a3ac680c55c1"/>
+  <systemcomposer.services.proxy.WorkspaceWrapper type="systemcomposer.services.proxy.WorkspaceWrapper" uuid="8940a387-aac1-4dbe-95d0-a16394626fba"/>
+  <systemcomposer.services.proxy.WorkspaceWrapper type="systemcomposer.services.proxy.WorkspaceWrapper" uuid="9eb2aacf-07c7-432d-910e-114e07580df1"/>
 </MF0>

@@ -103,11 +103,11 @@
     <p_Name>PortProfile</p_Name>
     <elemProxy type="systemcomposer.services.proxy.ProxyTarget" uuid="2c6f5540-4c00-45a4-b9b8-75ee73c90020"/>
   </systemcomposer.profile.Profile>
-  <systemcomposer.property.UnitQueryClientWrapper type="systemcomposer.property.UnitQueryClientWrapper" uuid="a07b79bf-c457-41ed-a6a0-ae2698dc479c"/>
   <systemcomposer.services.proxy.ModelIdentifier type="systemcomposer.services.proxy.ModelIdentifier" uuid="78129c8d-ef58-41ea-8ade-0eba1f5c6a30">
     <URI>PortProfile</URI>
     <modelType>PROFILE_MODEL</modelType>
   </systemcomposer.services.proxy.ModelIdentifier>
+  <systemcomposer.property.UnitQueryClientWrapper type="systemcomposer.property.UnitQueryClientWrapper" uuid="a07b79bf-c457-41ed-a6a0-ae2698dc479c"/>
   <systemcomposer.services.proxy.ModelResolver type="systemcomposer.services.proxy.ModelResolver" uuid="8c771100-c74f-4dbc-bc70-a7782cc5a897">
     <Proxies type="systemcomposer.services.proxy.BidirectionalProxy" uuid="ff90d676-e2ef-40d5-8694-0a3bd6c75d06">
       <Source type="systemcomposer.services.proxy.ProxySource" uuid="2de34ef3-fe56-493d-826e-6e236dbfacc9"/>

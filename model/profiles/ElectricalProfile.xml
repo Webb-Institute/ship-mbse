@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <MF0 version="1.1" packageUris="http://schema.mathworks.com/mf0/meta/19700101 http://schema.mathworks.com/mf0/systemcomposer_property/2.13 http://schema.mathworks.com/mf0/systemcomposer_services_proxy/1.2">
+  <systemcomposer.services.proxy.ModelIdentifier type="systemcomposer.services.proxy.ModelIdentifier" uuid="5de54571-2353-4b3f-a003-52476a12950a">
+    <URI>ElectricalProfile</URI>
+    <modelType>PROFILE_MODEL</modelType>
+  </systemcomposer.services.proxy.ModelIdentifier>
   <systemcomposer.profile.Profile type="systemcomposer.profile.Profile" uuid="c51af674-93ab-4e5e-b6bd-d7d4a9ac42e2">
     <prototypes type="systemcomposer.profile.Prototype" uuid="ce49fb7a-f25a-4d5a-9107-f06df3ae6988">
       <appliesTo>Component</appliesTo>
@@ -13,9 +17,10 @@
       <metaAttributes type="mf.zero.meta.AttributeMap" uuid="7d60b464-a7dd-4061-9824-7ed61d71e95c"/>
       <propertySet type="systemcomposer.property.PropertySet" uuid="09f845e0-76ab-4573-b0b4-57d8b9fd240b">
         <properties type="systemcomposer.property.PropertyDefinition" uuid="b62c5b53-7b86-4d7b-8293-34513a91d2ae">
-          <currentVersionId>8dcee265-b0e3-4a96-8732-744bebe92e1e</currentVersionId>
+          <currentVersionId>ebe14beb-cdbd-4c0a-81b5-42d2a1150850</currentVersionId>
           <p_Name>PowerRequired</p_Name>
           <defaultValue type="systemcomposer.property.Value" uuid="8cd3f16f-9130-4ee0-9c19-f42f75eb0f52">
+            <storedExpression>NaN</storedExpression>
             <units>kW</units>
             <valueTypeProxy type="systemcomposer.services.proxy.ProxySource" uuid="9b47e0f5-94a3-4c89-8139-d9424b38d7e5">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="807a8735-bbfd-4690-9ec2-f902eeded871"/>
@@ -40,10 +45,11 @@
           <elemProxy type="systemcomposer.services.proxy.ProxyTarget" uuid="95f909bb-564c-4cfc-a466-fff45ee9efc0"/>
         </properties>
         <properties type="systemcomposer.property.PropertyDefinition" uuid="39d2d763-6402-4520-8d0e-bdd2e2b24aac">
-          <currentVersionId>451631f8-8612-471f-b07c-c87c64e927fa</currentVersionId>
+          <currentVersionId>2ffb21a2-9f91-4c6f-aa11-1640bd670091</currentVersionId>
           <p_Index>1</p_Index>
           <p_Name>PowerFactor</p_Name>
           <defaultValue type="systemcomposer.property.Value" uuid="dd05a3cf-74a9-420a-a178-11d9ddd9cf6e">
+            <storedExpression>NaN</storedExpression>
             <valueTypeProxy type="systemcomposer.services.proxy.ProxySource" uuid="20bad111-9372-4e9d-8989-eae7f6b40fea">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="80826f80-49eb-45aa-8841-c944c265f916"/>
               <realElement type="systemcomposer.property.Value" uuid="dd05a3cf-74a9-420a-a178-11d9ddd9cf6e"/>
@@ -105,9 +111,10 @@
       <metaAttributes type="mf.zero.meta.AttributeMap" uuid="364b23b7-c969-489b-8235-b3544ab1336e"/>
       <propertySet type="systemcomposer.property.PropertySet" uuid="7ea448a9-8926-4fb2-858f-2a5eeb0babda">
         <properties type="systemcomposer.property.PropertyDefinition" uuid="54e7d890-b9c4-4035-bc49-2a7af6ea1f4a">
-          <currentVersionId>d9b99156-9061-47fc-a9c2-5b25ea09ac24</currentVersionId>
+          <currentVersionId>992623a2-ffed-4a78-9a32-537e6a66f459</currentVersionId>
           <p_Name>PowerGenerated</p_Name>
           <defaultValue type="systemcomposer.property.Value" uuid="38d89194-9d46-461e-a9ed-07d0dfb37cc1">
+            <storedExpression>NaN</storedExpression>
             <units>kW</units>
             <valueTypeProxy type="systemcomposer.services.proxy.ProxySource" uuid="09465431-e13e-4c72-b5e9-0dd7aa5b498b">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="cd406643-df24-4898-93d3-8e87735310a3"/>
@@ -221,10 +228,6 @@
     <p_Name>ElectricalProfile</p_Name>
     <elemProxy type="systemcomposer.services.proxy.ProxyTarget" uuid="59743fc2-b851-4dc6-968c-9fdf529e537e"/>
   </systemcomposer.profile.Profile>
-  <systemcomposer.services.proxy.ModelIdentifier type="systemcomposer.services.proxy.ModelIdentifier" uuid="5de54571-2353-4b3f-a003-52476a12950a">
-    <URI>ElectricalProfile</URI>
-    <modelType>PROFILE_MODEL</modelType>
-  </systemcomposer.services.proxy.ModelIdentifier>
   <systemcomposer.property.UnitQueryClientWrapper type="systemcomposer.property.UnitQueryClientWrapper" uuid="24f97a9c-6401-49a8-942b-1083ad9974e9"/>
   <systemcomposer.services.proxy.ModelResolver type="systemcomposer.services.proxy.ModelResolver" uuid="3745edfe-672d-46e6-813d-77a2103de021">
     <Proxies type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="80826f80-49eb-45aa-8841-c944c265f916">
@@ -280,4 +283,7 @@
     </Proxies>
   </systemcomposer.services.proxy.ModelResolver>
   <systemcomposer.services.proxy.WorkspaceWrapper type="systemcomposer.services.proxy.WorkspaceWrapper" uuid="98913161-5bee-4701-937c-6308ba6acfc9"/>
+  <systemcomposer.services.proxy.WorkspaceWrapper type="systemcomposer.services.proxy.WorkspaceWrapper" uuid="c2d96436-d1be-4129-ba63-242a86e75485"/>
+  <systemcomposer.services.proxy.WorkspaceWrapper type="systemcomposer.services.proxy.WorkspaceWrapper" uuid="419b0a46-fb6e-4dda-8acb-f4ed72f4bd67"/>
+  <systemcomposer.services.proxy.WorkspaceWrapper type="systemcomposer.services.proxy.WorkspaceWrapper" uuid="aeb12a0b-ebef-4d8d-95bf-910667cc8efc"/>
 </MF0>

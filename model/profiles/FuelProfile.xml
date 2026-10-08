@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <MF0 version="1.1" packageUris="http://schema.mathworks.com/mf0/meta/19700101 http://schema.mathworks.com/mf0/systemcomposer_property/2.13 http://schema.mathworks.com/mf0/systemcomposer_services_proxy/1.2">
+  <systemcomposer.services.proxy.WorkspaceWrapper type="systemcomposer.services.proxy.WorkspaceWrapper" uuid="c1b88f2c-c89e-47e2-bc55-1338c3b6322e"/>
   <systemcomposer.profile.Profile type="systemcomposer.profile.Profile" uuid="a16b5199-677b-4ed9-9dc8-8603ec7f6867">
     <prototypes type="systemcomposer.profile.Prototype" uuid="a85ae3b1-ec8b-4386-92bd-801d73a2f316">
       <appliesTo>Component</appliesTo>
@@ -13,10 +14,11 @@
       <metaAttributes type="mf.zero.meta.AttributeMap" uuid="80d142a8-4959-4e81-b665-19247be93eb8"/>
       <propertySet type="systemcomposer.property.PropertySet" uuid="c015de56-994c-4b4e-8b23-dff05248dd0a">
         <properties type="systemcomposer.property.PropertyDefinition" uuid="a780e022-0249-49eb-bbaf-56dc3c2a4666">
-          <currentVersionId>f9e0ba2b-8193-413c-aa40-71c77bc5e155</currentVersionId>
+          <currentVersionId>7417cdce-0779-4666-90f8-dfc49b2a32e8</currentVersionId>
           <p_Name>FuelRequired</p_Name>
           <defaultValue type="systemcomposer.property.Value" uuid="87c306c9-f96e-49f5-a229-4b2140b00d8f">
-            <units>kL/s</units>
+            <storedExpression>NaN</storedExpression>
+            <units>t/h</units>
             <valueTypeProxy type="systemcomposer.services.proxy.ProxySource" uuid="2e272d8d-17d1-460e-ae80-c9842394c65c">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="2a1db16c-dd12-45a5-ab6b-a98b5f8e755e"/>
               <realElement type="systemcomposer.property.Value" uuid="87c306c9-f96e-49f5-a229-4b2140b00d8f"/>
@@ -25,7 +27,7 @@
           <ownedType type="systemcomposer.property.FloatType" uuid="76071178-1e7d-41bc-b82b-8a599241403f">
             <min>0.0</min>
             <unitChecker type="systemcomposer.property.UnitQueryClientWrapper" uuid="6f4925d9-dafe-4a5c-b562-d13f0c686b0f"/>
-            <units>kL/s</units>
+            <units>t/h</units>
             <typeProxy type="systemcomposer.services.proxy.ProxySource" uuid="c641080a-f10d-42e9-a50c-e1bdb644bfe4">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="f70b0897-8ff3-42d2-9941-11360ee5fde4"/>
               <realElement type="systemcomposer.property.FloatType" uuid="76071178-1e7d-41bc-b82b-8a599241403f"/>
@@ -101,10 +103,11 @@
       <metaAttributes type="mf.zero.meta.AttributeMap" uuid="c89fbf39-2780-49d8-8fca-40af94874357"/>
       <propertySet type="systemcomposer.property.PropertySet" uuid="f5f43116-31d3-4c1e-923d-8de9ce687a4f">
         <properties type="systemcomposer.property.PropertyDefinition" uuid="1fbb3950-13d5-4a24-9b07-1c5511e27ad5">
-          <currentVersionId>2f7a20d5-f4eb-4bd3-92c7-f984f5035163</currentVersionId>
+          <currentVersionId>b2f01f43-428b-4acd-95ae-fef6298cd244</currentVersionId>
           <p_Name>FuelProduced</p_Name>
           <defaultValue type="systemcomposer.property.Value" uuid="59696c5c-c81c-4109-ab91-a99c417d2d0d">
-            <units>kL/s</units>
+            <storedExpression>NaN</storedExpression>
+            <units>t/h</units>
             <valueTypeProxy type="systemcomposer.services.proxy.ProxySource" uuid="70ebc837-36ea-42eb-a06a-7924670e5035">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="e3c1fb54-cff1-476c-a070-b795da4fdb34"/>
               <realElement type="systemcomposer.property.Value" uuid="59696c5c-c81c-4109-ab91-a99c417d2d0d"/>
@@ -113,7 +116,7 @@
           <ownedType type="systemcomposer.property.FloatType" uuid="7477f690-b7e9-493e-98f5-747adfa4a69c">
             <min>0.0</min>
             <unitChecker type="systemcomposer.property.UnitQueryClientWrapper" uuid="6f4925d9-dafe-4a5c-b562-d13f0c686b0f"/>
-            <units>kL/s</units>
+            <units>t/h</units>
             <typeProxy type="systemcomposer.services.proxy.ProxySource" uuid="601e34ed-d6b3-413e-8a33-a654999709f9">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="f70b0897-8ff3-42d2-9941-11360ee5fde4"/>
               <realElement type="systemcomposer.property.FloatType" uuid="7477f690-b7e9-493e-98f5-747adfa4a69c"/>
@@ -127,11 +130,12 @@
           <elemProxy type="systemcomposer.services.proxy.ProxyTarget" uuid="7212302a-34c4-42ab-852f-3a17cb7c8b7e"/>
         </properties>
         <properties type="systemcomposer.property.PropertyDefinition" uuid="6620baa1-93ed-456a-8f7d-a36795ea998b">
-          <currentVersionId>fc4bb145-4e14-4e2c-8c53-a6fb6c472277</currentVersionId>
+          <currentVersionId>b3c8f178-407e-4304-8096-c596a5d1a7f7</currentVersionId>
           <p_Index>1</p_Index>
           <p_Name>FuelStored</p_Name>
           <defaultValue type="systemcomposer.property.Value" uuid="6048a288-b55e-492b-925b-90b94b6e67df">
-            <units>kL</units>
+            <storedExpression>NaN</storedExpression>
+            <units>t</units>
             <valueTypeProxy type="systemcomposer.services.proxy.ProxySource" uuid="c38e67d7-8353-4ab8-aeff-ec61667c0fed">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="c91cd159-ade9-4179-bfb3-694f7a4941d7"/>
               <realElement type="systemcomposer.property.Value" uuid="6048a288-b55e-492b-925b-90b94b6e67df"/>
@@ -140,7 +144,7 @@
           <ownedType type="systemcomposer.property.FloatType" uuid="9e70c297-745a-4ad0-a3cd-aa059f5cb636">
             <min>0.0</min>
             <unitChecker type="systemcomposer.property.UnitQueryClientWrapper" uuid="6f4925d9-dafe-4a5c-b562-d13f0c686b0f"/>
-            <units>kL</units>
+            <units>t</units>
             <typeProxy type="systemcomposer.services.proxy.ProxySource" uuid="237ef4c7-db31-40d0-b0a5-a0c6bb5900ec">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="f70b0897-8ff3-42d2-9941-11360ee5fde4"/>
               <realElement type="systemcomposer.property.FloatType" uuid="9e70c297-745a-4ad0-a3cd-aa059f5cb636"/>
@@ -243,12 +247,11 @@
     <p_Name>FuelProfile</p_Name>
     <elemProxy type="systemcomposer.services.proxy.ProxyTarget" uuid="c8a52b35-48f7-42cc-b1be-172320200f22"/>
   </systemcomposer.profile.Profile>
+  <systemcomposer.property.UnitQueryClientWrapper type="systemcomposer.property.UnitQueryClientWrapper" uuid="6f4925d9-dafe-4a5c-b562-d13f0c686b0f"/>
   <systemcomposer.services.proxy.ModelIdentifier type="systemcomposer.services.proxy.ModelIdentifier" uuid="978951f3-4a1f-451c-8aec-833ccc63761d">
     <URI>FuelProfile</URI>
     <modelType>PROFILE_MODEL</modelType>
   </systemcomposer.services.proxy.ModelIdentifier>
-  <systemcomposer.property.UnitQueryClientWrapper type="systemcomposer.property.UnitQueryClientWrapper" uuid="6f4925d9-dafe-4a5c-b562-d13f0c686b0f"/>
-  <systemcomposer.services.proxy.WorkspaceWrapper type="systemcomposer.services.proxy.WorkspaceWrapper" uuid="966b9c46-d54e-4911-82f4-88f4938c63c2"/>
   <systemcomposer.services.proxy.ModelResolver type="systemcomposer.services.proxy.ModelResolver" uuid="16fb28e0-a083-4841-9a61-e9939a8af1cd">
     <Proxies type="systemcomposer.services.proxy.BidirectionalProxy" uuid="c71f1879-7a9b-47e5-ae09-b26297ab98ab">
       <Source type="systemcomposer.services.proxy.ProxySource" uuid="d8c99d26-c152-4d86-9060-049e045636b5"/>
@@ -314,4 +317,7 @@
       <TargetId>f6333322-956b-461c-9aeb-5fce0e869413</TargetId>
     </Proxies>
   </systemcomposer.services.proxy.ModelResolver>
+  <systemcomposer.services.proxy.WorkspaceWrapper type="systemcomposer.services.proxy.WorkspaceWrapper" uuid="966b9c46-d54e-4911-82f4-88f4938c63c2"/>
+  <systemcomposer.services.proxy.WorkspaceWrapper type="systemcomposer.services.proxy.WorkspaceWrapper" uuid="6eb3983d-0724-4598-b838-cef418834157"/>
+  <systemcomposer.services.proxy.WorkspaceWrapper type="systemcomposer.services.proxy.WorkspaceWrapper" uuid="0d5b1bbc-ed67-45fd-bfee-bbc8af88b50f"/>
 </MF0>

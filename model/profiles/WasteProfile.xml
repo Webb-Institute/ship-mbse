@@ -13,10 +13,11 @@
       <metaAttributes type="mf.zero.meta.AttributeMap" uuid="40483bb8-138a-4bb2-ad2d-265fd9e60efe"/>
       <propertySet type="systemcomposer.property.PropertySet" uuid="189727c9-4d17-4f35-8898-d05cc33dd407">
         <properties type="systemcomposer.property.PropertyDefinition" uuid="42002925-7632-4599-96b6-f6cd1301a3f3">
-          <currentVersionId>b9344e8f-6c17-4c7b-b5a5-f039561b4f37</currentVersionId>
+          <currentVersionId>32fe7674-ff3a-4962-b513-571af2abe32a</currentVersionId>
           <p_Name>WGProduced</p_Name>
           <defaultValue type="systemcomposer.property.Value" uuid="98454586-765e-4549-b5df-15b775cf22dd">
-            <units>kL/s</units>
+            <storedExpression>NaN</storedExpression>
+            <units>kg/h</units>
             <valueTypeProxy type="systemcomposer.services.proxy.ProxySource" uuid="308869ff-5c9d-4f4c-b69f-c5aed119a71a">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="11e4530f-e3d6-46ed-a7d5-6b08e44b0e0f"/>
               <realElement type="systemcomposer.property.Value" uuid="98454586-765e-4549-b5df-15b775cf22dd"/>
@@ -25,7 +26,7 @@
           <ownedType type="systemcomposer.property.FloatType" uuid="29d3329b-9615-476a-94d3-c3749d700959">
             <min>0.0</min>
             <unitChecker type="systemcomposer.property.UnitQueryClientWrapper" uuid="eb3182a8-fd96-4420-92b1-0cdcedf15e79"/>
-            <units>kL/s</units>
+            <units>kg/h</units>
             <typeProxy type="systemcomposer.services.proxy.ProxySource" uuid="510fdaa0-19be-415a-9e87-c3c34b93aae7">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="b5b5897a-75f7-4261-b8c3-2c488112b8f7"/>
               <realElement type="systemcomposer.property.FloatType" uuid="29d3329b-9615-476a-94d3-c3749d700959"/>
@@ -71,10 +72,11 @@
       <defaultStereotypeMap type="systemcomposer.profile.DefaultStereotypeMap" uuid="066d9ae4-1408-4b77-bc9e-7059bbe77ead"/>
       <propertySet type="systemcomposer.property.PropertySet" uuid="47ac1404-707b-4dfd-9857-553eb869fbc5">
         <properties type="systemcomposer.property.PropertyDefinition" uuid="6501a81f-c977-465f-a38e-4f4a6fe37a88">
-          <currentVersionId>3d96e84b-65d6-44f7-9a82-31a66ad879a9</currentVersionId>
+          <currentVersionId>326add4c-6109-425b-b5d7-cebca7a0fa15</currentVersionId>
           <p_Name>WOProduced</p_Name>
           <defaultValue type="systemcomposer.property.Value" uuid="2faed49e-00e0-4b3d-92a8-a78f74c637c0">
-            <units>kL/s</units>
+            <storedExpression>NaN</storedExpression>
+            <units>m^3/day</units>
             <valueTypeProxy type="systemcomposer.services.proxy.ProxySource" uuid="90ea25ac-177b-4566-8688-c703cb70920c">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="3a34343b-3193-4921-9c37-4bdf53dcf7cd"/>
               <realElement type="systemcomposer.property.Value" uuid="2faed49e-00e0-4b3d-92a8-a78f74c637c0"/>
@@ -83,7 +85,7 @@
           <ownedType type="systemcomposer.property.FloatType" uuid="474e086b-ce9b-40ba-95b0-48670a9b9e22">
             <min>0.0</min>
             <unitChecker type="systemcomposer.property.UnitQueryClientWrapper" uuid="eb3182a8-fd96-4420-92b1-0cdcedf15e79"/>
-            <units>kL/s</units>
+            <units>m^3/day</units>
             <typeProxy type="systemcomposer.services.proxy.ProxySource" uuid="bacf1885-3483-40cf-8d4d-8332c46037aa">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="b5b5897a-75f7-4261-b8c3-2c488112b8f7"/>
               <realElement type="systemcomposer.property.FloatType" uuid="474e086b-ce9b-40ba-95b0-48670a9b9e22"/>
@@ -129,10 +131,11 @@
       <defaultStereotypeMap type="systemcomposer.profile.DefaultStereotypeMap" uuid="0888a484-9b21-4256-925a-9d8a8f3e8d27"/>
       <propertySet type="systemcomposer.property.PropertySet" uuid="7d4c8ac3-1c02-4f0a-9049-97403a5b2d98">
         <properties type="systemcomposer.property.PropertyDefinition" uuid="175e364a-7e1a-4506-920e-2def694155db">
-          <currentVersionId>69738543-94d2-407f-8609-1ede5429d77d</currentVersionId>
+          <currentVersionId>28e39a2c-9b97-4aeb-a619-8d74cbc5acb9</currentVersionId>
           <p_Name>WGReceived</p_Name>
           <defaultValue type="systemcomposer.property.Value" uuid="272466e7-b7c5-4a29-b534-69f9afe343c7">
-            <units>kL/s</units>
+            <storedExpression>NaN</storedExpression>
+            <units>kg/h</units>
             <valueTypeProxy type="systemcomposer.services.proxy.ProxySource" uuid="b2289a68-5642-4fde-8d25-d81cc7898deb">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="d26a522a-0b55-4a2d-9cb5-81211fb8dbc6"/>
               <realElement type="systemcomposer.property.Value" uuid="272466e7-b7c5-4a29-b534-69f9afe343c7"/>
@@ -141,7 +144,7 @@
           <ownedType type="systemcomposer.property.FloatType" uuid="517c9c29-11f5-4fdf-99e7-f799966b2102">
             <min>0.0</min>
             <unitChecker type="systemcomposer.property.UnitQueryClientWrapper" uuid="eb3182a8-fd96-4420-92b1-0cdcedf15e79"/>
-            <units>kL/s</units>
+            <units>kg/h</units>
             <typeProxy type="systemcomposer.services.proxy.ProxySource" uuid="89bda478-b45b-495c-9bb5-2b575bd75d42">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="b5b5897a-75f7-4261-b8c3-2c488112b8f7"/>
               <realElement type="systemcomposer.property.FloatType" uuid="517c9c29-11f5-4fdf-99e7-f799966b2102"/>
@@ -155,11 +158,12 @@
           <elemProxy type="systemcomposer.services.proxy.ProxyTarget" uuid="172557c9-d795-4167-adb1-cc2b3e9b4421"/>
         </properties>
         <properties type="systemcomposer.property.PropertyDefinition" uuid="7d99d040-5346-4d0c-b16e-570997d3fdfb">
-          <currentVersionId>a6d9a53b-19dd-4c67-aca7-86b5c271508a</currentVersionId>
+          <currentVersionId>c6c346d4-37f5-47cb-bb1c-4a753d55695f</currentVersionId>
           <p_Index>1</p_Index>
           <p_Name>WWReceived</p_Name>
           <defaultValue type="systemcomposer.property.Value" uuid="d0c8ce5c-3590-43e4-87d3-8d7f41c67b64">
-            <units>kL/s</units>
+            <storedExpression>NaN</storedExpression>
+            <units>m^3/day</units>
             <valueTypeProxy type="systemcomposer.services.proxy.ProxySource" uuid="110d250f-fc36-48ae-8322-31b87c7c3869">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="b9e88398-a782-40e4-97c8-19c16dcc7b11"/>
               <realElement type="systemcomposer.property.Value" uuid="d0c8ce5c-3590-43e4-87d3-8d7f41c67b64"/>
@@ -168,7 +172,7 @@
           <ownedType type="systemcomposer.property.FloatType" uuid="8306cb2a-859f-4855-a603-e7ae29f817bb">
             <min>0.0</min>
             <unitChecker type="systemcomposer.property.UnitQueryClientWrapper" uuid="eb3182a8-fd96-4420-92b1-0cdcedf15e79"/>
-            <units>kL/s</units>
+            <units>m^3/day</units>
             <typeProxy type="systemcomposer.services.proxy.ProxySource" uuid="ffa72b72-283b-45f2-bb0f-4bafcd94a9a7">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="b5b5897a-75f7-4261-b8c3-2c488112b8f7"/>
               <realElement type="systemcomposer.property.FloatType" uuid="8306cb2a-859f-4855-a603-e7ae29f817bb"/>
@@ -182,11 +186,12 @@
           <elemProxy type="systemcomposer.services.proxy.ProxyTarget" uuid="153dae7b-a5e5-4c72-95be-823adb7a37a7"/>
         </properties>
         <properties type="systemcomposer.property.PropertyDefinition" uuid="ee910257-b91a-4b65-b975-b7e565e91c7c">
-          <currentVersionId>534c5a7c-6637-4641-8ac2-a66670d3e58c</currentVersionId>
+          <currentVersionId>7200343e-72b5-40a0-9507-8f7a70c3d449</currentVersionId>
           <p_Index>2</p_Index>
           <p_Name>WSReceived</p_Name>
           <defaultValue type="systemcomposer.property.Value" uuid="3e62476d-1860-4752-811c-09537abae9d2">
-            <units>kL/s</units>
+            <storedExpression>NaN</storedExpression>
+            <units>kg/day</units>
             <valueTypeProxy type="systemcomposer.services.proxy.ProxySource" uuid="06cbb71f-a4c5-499c-9376-46b67561e6d7">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="2eeb0b63-4001-466b-be43-f045b20bb532"/>
               <realElement type="systemcomposer.property.Value" uuid="3e62476d-1860-4752-811c-09537abae9d2"/>
@@ -195,7 +200,7 @@
           <ownedType type="systemcomposer.property.FloatType" uuid="272a7dfe-479c-4ee9-8719-f07fbd72080c">
             <min>0.0</min>
             <unitChecker type="systemcomposer.property.UnitQueryClientWrapper" uuid="eb3182a8-fd96-4420-92b1-0cdcedf15e79"/>
-            <units>kL/s</units>
+            <units>kg/day</units>
             <typeProxy type="systemcomposer.services.proxy.ProxySource" uuid="3b8190f5-dae6-4680-bbaa-d405549aadc3">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="b5b5897a-75f7-4261-b8c3-2c488112b8f7"/>
               <realElement type="systemcomposer.property.FloatType" uuid="272a7dfe-479c-4ee9-8719-f07fbd72080c"/>
@@ -232,11 +237,12 @@
           <elemProxy type="systemcomposer.services.proxy.ProxyTarget" uuid="9a690ab1-843e-4c60-a496-19f90823ad81"/>
         </properties>
         <properties type="systemcomposer.property.PropertyDefinition" uuid="40296a72-eb90-4722-b43a-70939627bd64">
-          <currentVersionId>d5bc8f0a-29c9-4403-9b70-55bc364f8b14</currentVersionId>
+          <currentVersionId>1d15240e-c245-48d6-be5a-8704a1585f48</currentVersionId>
           <p_Index>4</p_Index>
           <p_Name>WOReceived</p_Name>
           <defaultValue type="systemcomposer.property.Value" uuid="363e08e5-41b7-4aa3-80d4-18fe7bd5abb8">
-            <units>kL/s</units>
+            <storedExpression>NaN</storedExpression>
+            <units>m^3/day</units>
             <valueTypeProxy type="systemcomposer.services.proxy.ProxySource" uuid="117e8f1a-47ed-4e08-8b22-be75ac8f4cc4">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="7ed99e27-876c-49ce-93a7-ad6874a83506"/>
               <realElement type="systemcomposer.property.Value" uuid="363e08e5-41b7-4aa3-80d4-18fe7bd5abb8"/>
@@ -245,7 +251,7 @@
           <ownedType type="systemcomposer.property.FloatType" uuid="d2a0770a-f3ef-48e5-9822-6b381be15ad1">
             <min>0.0</min>
             <unitChecker type="systemcomposer.property.UnitQueryClientWrapper" uuid="eb3182a8-fd96-4420-92b1-0cdcedf15e79"/>
-            <units>kL/s</units>
+            <units>m^3/day</units>
             <typeProxy type="systemcomposer.services.proxy.ProxySource" uuid="590dc166-8b7a-4c83-a721-c302d9433289">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="b5b5897a-75f7-4261-b8c3-2c488112b8f7"/>
               <realElement type="systemcomposer.property.FloatType" uuid="d2a0770a-f3ef-48e5-9822-6b381be15ad1"/>
@@ -270,10 +276,11 @@
       <metaAttributes type="mf.zero.meta.AttributeMap" uuid="1229a80f-d338-4a53-90c7-6698b622d09c"/>
       <propertySet type="systemcomposer.property.PropertySet" uuid="dab74bd2-7d96-4618-bd1b-05cd42b7961a">
         <properties type="systemcomposer.property.PropertyDefinition" uuid="3ebbffcf-16f6-4cef-bca7-bda4ee68c8e7">
-          <currentVersionId>74ec2d38-570f-4301-a3f2-75775c8622dc</currentVersionId>
+          <currentVersionId>0115e561-a902-4fc9-b597-95025ec8a560</currentVersionId>
           <p_Name>WSProduced</p_Name>
           <defaultValue type="systemcomposer.property.Value" uuid="e5daa7fc-e02d-4bc2-9af0-b77e487d04fb">
-            <units>kL/s</units>
+            <storedExpression>NaN</storedExpression>
+            <units>kg/day</units>
             <valueTypeProxy type="systemcomposer.services.proxy.ProxySource" uuid="13f736ab-fad6-44f6-bccc-e855421d57dd">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="596a9cf1-0377-4d84-837a-82c8b1477386"/>
               <realElement type="systemcomposer.property.Value" uuid="e5daa7fc-e02d-4bc2-9af0-b77e487d04fb"/>
@@ -282,7 +289,7 @@
           <ownedType type="systemcomposer.property.FloatType" uuid="aa4ef060-9a18-4c1c-8d9a-dea9a41242ef">
             <min>0.0</min>
             <unitChecker type="systemcomposer.property.UnitQueryClientWrapper" uuid="eb3182a8-fd96-4420-92b1-0cdcedf15e79"/>
-            <units>kL/s</units>
+            <units>kg/day</units>
             <typeProxy type="systemcomposer.services.proxy.ProxySource" uuid="594e3557-bf7e-49cf-80f6-efe91a2fc582">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="b5b5897a-75f7-4261-b8c3-2c488112b8f7"/>
               <realElement type="systemcomposer.property.FloatType" uuid="aa4ef060-9a18-4c1c-8d9a-dea9a41242ef"/>
@@ -335,10 +342,11 @@
       <metaAttributes type="mf.zero.meta.AttributeMap" uuid="a66dcbaa-6b4a-42a5-a9cd-b4f3c0925c3f"/>
       <propertySet type="systemcomposer.property.PropertySet" uuid="12a7e401-fe39-4721-b503-0e56ebdc5d28">
         <properties type="systemcomposer.property.PropertyDefinition" uuid="57c3d154-34e7-4219-8331-763e956e12ef">
-          <currentVersionId>f288e6ab-01eb-4a20-a043-3e2a167b3954</currentVersionId>
+          <currentVersionId>37758d91-59c0-4eb3-a5d9-3cee47445012</currentVersionId>
           <p_Name>WWProduced</p_Name>
           <defaultValue type="systemcomposer.property.Value" uuid="03794443-af45-41f6-8ebb-de3fee656d4f">
-            <units>kL/s</units>
+            <storedExpression>NaN</storedExpression>
+            <units>m^3/day</units>
             <valueTypeProxy type="systemcomposer.services.proxy.ProxySource" uuid="d05d1541-0f4e-45db-ad2a-d4bc228a3eac">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="36d63949-f0f7-4228-a898-1bfcee527753"/>
               <realElement type="systemcomposer.property.Value" uuid="03794443-af45-41f6-8ebb-de3fee656d4f"/>
@@ -347,7 +355,7 @@
           <ownedType type="systemcomposer.property.FloatType" uuid="02a1ed04-134b-4c0d-a0e4-ed6c99c9ba6f">
             <min>0.0</min>
             <unitChecker type="systemcomposer.property.UnitQueryClientWrapper" uuid="eb3182a8-fd96-4420-92b1-0cdcedf15e79"/>
-            <units>kL/s</units>
+            <units>m^3/day</units>
             <typeProxy type="systemcomposer.services.proxy.ProxySource" uuid="20bbdcc6-e130-4e3b-b894-c3549a671cd0">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="b5b5897a-75f7-4261-b8c3-2c488112b8f7"/>
               <realElement type="systemcomposer.property.FloatType" uuid="02a1ed04-134b-4c0d-a0e4-ed6c99c9ba6f"/>
@@ -450,11 +458,6 @@
     <p_Name>WasteProfile</p_Name>
     <elemProxy type="systemcomposer.services.proxy.ProxyTarget" uuid="3f2165bc-7705-4050-94f8-430da2383f8d"/>
   </systemcomposer.profile.Profile>
-  <systemcomposer.services.proxy.WorkspaceWrapper type="systemcomposer.services.proxy.WorkspaceWrapper" uuid="51e60048-4c6e-406f-8eaa-9ee987368ec9"/>
-  <systemcomposer.services.proxy.ModelIdentifier type="systemcomposer.services.proxy.ModelIdentifier" uuid="c9af5b42-1285-4a5b-af08-ff1d21cbfce7">
-    <URI>WasteProfile</URI>
-    <modelType>PROFILE_MODEL</modelType>
-  </systemcomposer.services.proxy.ModelIdentifier>
   <systemcomposer.services.proxy.ModelResolver type="systemcomposer.services.proxy.ModelResolver" uuid="d9806a3c-baa7-4abb-9bf2-0a675677cace">
     <Proxies type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="36d63949-f0f7-4228-a898-1bfcee527753">
       <Source type="systemcomposer.services.proxy.ProxySource" uuid="d05d1541-0f4e-45db-ad2a-d4bc228a3eac"/>
@@ -580,5 +583,13 @@
       <TargetId>fff57b2b-69b3-499a-9478-9582bba3921e</TargetId>
     </Proxies>
   </systemcomposer.services.proxy.ModelResolver>
+  <systemcomposer.services.proxy.ModelIdentifier type="systemcomposer.services.proxy.ModelIdentifier" uuid="c9af5b42-1285-4a5b-af08-ff1d21cbfce7">
+    <URI>WasteProfile</URI>
+    <modelType>PROFILE_MODEL</modelType>
+  </systemcomposer.services.proxy.ModelIdentifier>
+  <systemcomposer.services.proxy.WorkspaceWrapper type="systemcomposer.services.proxy.WorkspaceWrapper" uuid="51e60048-4c6e-406f-8eaa-9ee987368ec9"/>
   <systemcomposer.property.UnitQueryClientWrapper type="systemcomposer.property.UnitQueryClientWrapper" uuid="eb3182a8-fd96-4420-92b1-0cdcedf15e79"/>
+  <systemcomposer.services.proxy.WorkspaceWrapper type="systemcomposer.services.proxy.WorkspaceWrapper" uuid="74ef0161-711b-4130-a4d1-201187b65fda"/>
+  <systemcomposer.services.proxy.WorkspaceWrapper type="systemcomposer.services.proxy.WorkspaceWrapper" uuid="a03596ee-5306-4e54-8fac-e69a151da3ea"/>
+  <systemcomposer.services.proxy.WorkspaceWrapper type="systemcomposer.services.proxy.WorkspaceWrapper" uuid="b543078f-9b0d-4223-be39-f6f11b2c6691"/>
 </MF0>

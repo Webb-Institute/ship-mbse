@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <MF0 version="1.1" packageUris="http://schema.mathworks.com/mf0/meta/19700101 http://schema.mathworks.com/mf0/systemcomposer_property/2.13 http://schema.mathworks.com/mf0/systemcomposer_services_proxy/1.2">
+  <systemcomposer.services.proxy.WorkspaceWrapper type="systemcomposer.services.proxy.WorkspaceWrapper" uuid="b592e502-8674-4671-be24-25f95cb15fe2"/>
   <systemcomposer.profile.Profile type="systemcomposer.profile.Profile" uuid="addb3982-7acf-444c-ad44-e29365b3bf47">
     <prototypes type="systemcomposer.profile.Prototype" uuid="493c9252-41ef-4cf6-9873-805bfeb3e757">
       <appliesTo>Component</appliesTo>
@@ -13,9 +14,10 @@
       <metaAttributes type="mf.zero.meta.AttributeMap" uuid="759d9bc6-533f-44f9-836b-0c154543d0ee"/>
       <propertySet type="systemcomposer.property.PropertySet" uuid="b698955b-ec1a-4fac-8050-e0d5953dcaec">
         <properties type="systemcomposer.property.PropertyDefinition" uuid="4847b88e-1a82-4d89-a07f-43fb8e79cfdd">
-          <currentVersionId>85c18133-1e0c-4a67-96f6-81bb168d7054</currentVersionId>
+          <currentVersionId>d0a76dca-96d1-4d3e-a717-dc05eb43de6c</currentVersionId>
           <p_Name>Weight</p_Name>
           <defaultValue type="systemcomposer.property.Value" uuid="60c4710e-78ce-4e42-91ec-9077058b29ac">
+            <storedExpression>NaN</storedExpression>
             <units>t</units>
             <valueTypeProxy type="systemcomposer.services.proxy.ProxySource" uuid="34717641-acea-4e27-963a-77f84e9ce531">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="3bbcda49-2798-4869-ab53-877fb1df1d27"/>
@@ -40,10 +42,11 @@
           <elemProxy type="systemcomposer.services.proxy.ProxyTarget" uuid="f71ab755-2f22-4440-aba6-9b5b04df623f"/>
         </properties>
         <properties type="systemcomposer.property.PropertyDefinition" uuid="f424e8b2-9f2f-481f-804f-82ab12b7b184">
-          <currentVersionId>fb7ee003-31e6-48ac-b3bc-844efb8a5e8e</currentVersionId>
+          <currentVersionId>bc8a683b-2e76-4e7e-b142-70009aa1540e</currentVersionId>
           <p_Index>1</p_Index>
           <p_Name>LCG</p_Name>
           <defaultValue type="systemcomposer.property.Value" uuid="540d0714-2096-433c-a798-903cdccedd6b">
+            <storedExpression>NaN</storedExpression>
             <units>m</units>
             <valueTypeProxy type="systemcomposer.services.proxy.ProxySource" uuid="599c3ecc-b305-4f6e-a051-4636afedb50c">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="f607913f-8771-43c7-a3f0-f3da132d6989"/>
@@ -68,10 +71,11 @@
           <elemProxy type="systemcomposer.services.proxy.ProxyTarget" uuid="4aeba125-ef51-4171-9959-a7ae577eb413"/>
         </properties>
         <properties type="systemcomposer.property.PropertyDefinition" uuid="3fdff693-27f6-4546-a98c-20436609559f">
-          <currentVersionId>a4d78071-79fd-4473-bac6-f2b238e51646</currentVersionId>
+          <currentVersionId>75998891-47d8-4421-9397-639d3d2d36d5</currentVersionId>
           <p_Index>2</p_Index>
           <p_Name>VCG</p_Name>
           <defaultValue type="systemcomposer.property.Value" uuid="622639a6-c061-4412-a959-c8c9baef1432">
+            <storedExpression>NaN</storedExpression>
             <units>m</units>
             <valueTypeProxy type="systemcomposer.services.proxy.ProxySource" uuid="ec13aef5-90e0-4bf3-beae-610816f4708c">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="e249239e-a1f3-4490-a619-5715e759f6ec"/>
@@ -96,10 +100,11 @@
           <elemProxy type="systemcomposer.services.proxy.ProxyTarget" uuid="24fdc4d2-d825-4b36-8bc0-5a9124a395c1"/>
         </properties>
         <properties type="systemcomposer.property.PropertyDefinition" uuid="55ca23d7-fe3c-4942-bfa6-076c13631650">
-          <currentVersionId>a35a78c4-c204-4f97-9a54-b973d1b646c3</currentVersionId>
+          <currentVersionId>3c260e93-38c4-41cb-8921-093a7a78e390</currentVersionId>
           <p_Index>3</p_Index>
           <p_Name>TCG</p_Name>
           <defaultValue type="systemcomposer.property.Value" uuid="9b644620-91d0-4a7c-bdc9-2dfb6d0cfb1c">
+            <storedExpression>NaN</storedExpression>
             <units>m</units>
             <valueTypeProxy type="systemcomposer.services.proxy.ProxySource" uuid="3d0ba993-a8e0-4866-99dc-e5f070dca347">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="43c0ee51-bb8c-4b49-9d1b-d8e5587fc54a"/>
@@ -124,10 +129,11 @@
           <elemProxy type="systemcomposer.services.proxy.ProxyTarget" uuid="51c24051-4061-436e-bb98-16d13cc6427d"/>
         </properties>
         <properties type="systemcomposer.property.PropertyDefinition" uuid="2c50c8ea-77e8-4c13-b281-10c8c2da009e">
-          <currentVersionId>d3c4eb7b-a7ad-4ff4-883c-6accee052336</currentVersionId>
+          <currentVersionId>f857e4ab-e187-44ba-bbdc-f30b564f1bc3</currentVersionId>
           <p_Index>4</p_Index>
           <p_Name>WeightMargin</p_Name>
           <defaultValue type="systemcomposer.property.Value" uuid="a1fe47e3-4d87-494b-a429-c202acf92f59">
+            <storedExpression>NaN</storedExpression>
             <units>%</units>
             <valueTypeProxy type="systemcomposer.services.proxy.ProxySource" uuid="fe85ce00-48d1-45d6-91fe-7334eb23edf7">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="8f6d7dfa-90e4-4e49-ad9c-98af0eea5728"/>
@@ -218,11 +224,12 @@
     <p_Name>WeightsCentersProfile</p_Name>
     <elemProxy type="systemcomposer.services.proxy.ProxyTarget" uuid="e503f9f7-6941-4303-ab94-2a31ebabd4df"/>
   </systemcomposer.profile.Profile>
+  <systemcomposer.services.proxy.WorkspaceWrapper type="systemcomposer.services.proxy.WorkspaceWrapper" uuid="c5d6e895-062a-402d-b999-a9c800d74dca"/>
+  <systemcomposer.property.UnitQueryClientWrapper type="systemcomposer.property.UnitQueryClientWrapper" uuid="147411bd-127e-4d8d-bf78-0bbb718056f7"/>
   <systemcomposer.services.proxy.ModelIdentifier type="systemcomposer.services.proxy.ModelIdentifier" uuid="7c1cce35-0223-48b0-ae37-c08ecf693336">
     <URI>WeightsCentersProfile</URI>
     <modelType>PROFILE_MODEL</modelType>
   </systemcomposer.services.proxy.ModelIdentifier>
-  <systemcomposer.property.UnitQueryClientWrapper type="systemcomposer.property.UnitQueryClientWrapper" uuid="147411bd-127e-4d8d-bf78-0bbb718056f7"/>
   <systemcomposer.services.proxy.ModelResolver type="systemcomposer.services.proxy.ModelResolver" uuid="1afd66ab-1355-4891-9172-ac8ceb34f89b">
     <Proxies type="systemcomposer.services.proxy.BidirectionalProxy" uuid="19915034-0dc8-4422-8341-ee1b3809be00">
       <Source type="systemcomposer.services.proxy.ProxySource" uuid="4a03f696-5343-4f7d-b750-b56041ffc1f0"/>
@@ -273,5 +280,6 @@
       <TargetId>f115975f-05f6-41fc-b0d5-c1bc9a33a2c0</TargetId>
     </Proxies>
   </systemcomposer.services.proxy.ModelResolver>
+  <systemcomposer.services.proxy.WorkspaceWrapper type="systemcomposer.services.proxy.WorkspaceWrapper" uuid="c1e5558f-db93-49f9-8502-3a4d50bb04a9"/>
   <systemcomposer.services.proxy.WorkspaceWrapper type="systemcomposer.services.proxy.WorkspaceWrapper" uuid="e180ff58-6978-49fe-8940-90dc24814908"/>
 </MF0>
