@@ -36,3 +36,6 @@ data/analysis_results/*
 # --- Logs / temp ---
 *.log
 *.tmp
+
+# --- Local-only planning (not shared) ---
+TASKS.md
