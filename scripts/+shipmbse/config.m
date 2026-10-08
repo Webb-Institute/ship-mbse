@@ -6,7 +6,9 @@ function cfg = config()
 %   Fields:
 %     ModelName       Architecture model name
 %     RequirementSet  Requirement set name
+%     RootFolder      Repository root folder
 %     Paths           Component paths relative to the model root
+%     FuelSupplyPipes Fuel consumer path -> supplying pipe path (N-by-2)
 %     Stereotypes     Fully qualified stereotype names (Profile.Stereotype)
 %     Excel           Property table file names (on the project path)
 %
@@ -14,15 +16,23 @@ function cfg = config()
 
 cfg.ModelName      = "SYSTEM";
 cfg.RequirementSet = "ShipRequirements";
+cfg.RootFolder     = string(fileparts(fileparts(fileparts(mfilename("fullpath")))));
 
-% Component paths, relative to the model root (lookup with "<ModelName>/<path>")
+% Component paths, relative to the model root (lookup with "<ModelName>/<path>").
+% These are Simulink block paths: write a "/" inside a component name as "//".
 ship = "SHIP";
 aux  = ship + "/500 (AUXILLIARY SYSTEMS)";
 cfg.Paths.Ship        = ship;
 cfg.Paths.Propulsion  = ship + "/200 (PROPULSION)";
 cfg.Paths.Auxiliary   = aux;
 cfg.Paths.Fuel        = aux + "/52X (FUEL)";
-cfg.Paths.FuelActive  = aux + "/52X (FUEL)/52X FUEL";
+
+% Fuel consumers and the fuel-system pipe that supplies each one. Used by
+% propagatePipeFluids to copy the consumer's FuelType onto the pipe's Fluid.
+cfg.FuelSupplyPipes = [ ...
+    ship + "/200 (PROPULSION)/20X (MAIN ENGINE)",   cfg.Paths.Fuel + "/52X FUEL/525 (ME FO PIPING)";
+    ship + "/300 (ELECTRICAL)/30X (GENERATOR SETS)", cfg.Paths.Fuel + "/52X FUEL/526 (GS FO PIPING)";
+    aux + "/55X (CARGO//MISSION)",                   cfg.Paths.Fuel + "/52X FUEL/527 (MISSION FO PIPING)"];
 
 % Stereotypes (Profile.Stereotype)
 cfg.Stereotypes.WeightsCenters      = "WeightsCentersProfile.WeightsCenters";

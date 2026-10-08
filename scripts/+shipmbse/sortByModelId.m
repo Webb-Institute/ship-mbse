@@ -12,7 +12,7 @@ arguments
     pathVar (1,1) string = "Path"
 end
 
-names = componentName(T.(pathVar));
+names = shipmbse.pathLeaf(string(T.(pathVar)));
 key = str2double(regexp(names, "^\d+", "match", "once"));
 key(isnan(key)) = Inf;
 % Two-digit group IDs (e.g. 52X -> 52) sort with their three-digit members (520-529)
@@ -20,12 +20,4 @@ key(key < 100) = key(key < 100) * 10;
 [~, idx] = sortrows(table(key, names));
 T = T(idx, :);
 
-end
-
-function names = componentName(paths)
-names = string(paths);
-for k = 1:numel(names)
-    parts = split(names(k), "/");
-    names(k) = parts(end);
-end
 end

@@ -26,7 +26,7 @@ end
 
 [mp, details] = shipmbse.massProperties();
 details = shipmbse.sortByModelId(details);
-names = extractAfter(details.Path, asManyOfPattern(wildcardPattern + "/"));
+names = shipmbse.pathLeaf(details.Path);
 weightTable = table(names, details.Weight, details.MarginPct, details.WeightWithMargin, ...
     details.LCG, details.TCG, details.VCG, ...
     'VariableNames', {'ComponentName', 'BaseWeight_t', 'Margin_pct', 'TotalWeight_t', 'LCG_m', 'TCG_m', 'VCG_m'});

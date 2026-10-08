@@ -97,7 +97,7 @@ details = shipmbse.sortByModelId(details);
 fprintf(fid, "%-50s | %14s | %-6s\n", "Component", "Value [" + unit + "]", "Status");
 fprintf(fid, "%s\n", repmat('-', 1, width));
 for k = 1:height(details)
-    name = extractAfter(details.Path(k), asManyOfPattern(wildcardPattern + "/"));
+    name = shipmbse.pathLeaf(details.Path(k));
     fprintf(fid, "%-50s | %14.6g | %-6s\n", name, details.Value(k), onOff(details.StatusOn(k)));
 end
 fprintf(fid, "%-50s | %14.6g %s  (%d of %d on)\n", "TOTAL (On)", total, unit, ...

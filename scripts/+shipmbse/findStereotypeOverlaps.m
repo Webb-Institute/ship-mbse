@@ -25,7 +25,8 @@ overlaps = table('Size', [0 3], 'VariableTypes', {'string', 'string', 'string'},
     'VariableNames', {'Stereotype', 'Ancestor', 'Descendant'});
 for a = 1:numel(comps)
     if isempty(st{a}), continue, end
-    for d = find(startsWith(paths, paths(a) + "/"))'
+    isDescendant = startsWith(paths, paths(a) + "/") & ~startsWith(paths, paths(a) + "//");
+    for d = find(isDescendant)'
         shared = intersect(st{a}, st{d});
         for s = 1:numel(shared)
             overlaps(end+1, :) = {shared(s), paths(a), paths(d)}; %#ok<AGROW>
