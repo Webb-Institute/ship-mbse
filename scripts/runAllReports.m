@@ -15,16 +15,17 @@ runnerPath = fileparts(mfilename('fullpath'));
 fprintf('Project Root Initialized:\n%s\n\n', runnerPath);
 
 
-% Add plugin folder
+% Add plugin and utility folders (plugins depend on utilities)
 pluginPath = fullfile(runnerPath,'plugins');
+utilityPath = fullfile(runnerPath,'utilities');
 
-if isfolder(pluginPath)
+if isfolder(pluginPath) && isfolder(utilityPath)
 
-    addpath(pluginPath);
+    addpath(pluginPath, utilityPath);
 
 else
 
-    fprintf('FAILED: Plugin folder not found:\n%s\n', pluginPath);
+    fprintf('FAILED: Plugin or utility folder not found under:\n%s\n', runnerPath);
     return
 
 end

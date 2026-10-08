@@ -2,7 +2,7 @@ function weightTable = GenerateWeightTableReport(cmd)
     % =========================================================================
     % FILE MANAGEMENT & AUTOMATIC RUN ID GENERATION
     % =========================================================================
-    outputDir = 'Reports';
+    outputDir = getOutputDir('reports');
     modelName = 'SYSTEM';
 
     % Ensure output directory exists

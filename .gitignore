@@ -6,8 +6,8 @@ slprj/
 codegen/
 *.slxc
 octave-workspace
-resources/
-*.prj
+work/
+# NOTE: resources/project/ and *.prj are MATLAB Project metadata and MUST be tracked.
 
 # --- OS ---
 .DS_Store
@@ -29,6 +29,9 @@ outputs/tables/*
 outputs/case_study/*
 !outputs/case_study/.gitkeep
 
+# --- Legacy report folder (reports now go to outputs/reports) ---
+Reports/
+
 # --- Generated/derived data (keep folder structure via .gitkeep, ignore contents) ---
 data/analysis_results/*
 !data/analysis_results/.gitkeep
@@ -36,3 +39,6 @@ data/analysis_results/*
 # --- Logs / temp ---
 *.log
 *.tmp
+
+# --- Local-only planning (not shared) ---
+TASKS.md

@@ -412,7 +412,7 @@ function reportTable = generateInterfaceReport()
     % 7. WRITE OUTPUT TO TEXT FILE
     % =================================================================
     fileName = 'InterfaceReport.txt';
-    outputDir = 'Reports';
+    outputDir = getOutputDir('reports');
     filePath = fullfile(outputDir, fileName);
     fileID = fopen(filePath, 'wt');
 

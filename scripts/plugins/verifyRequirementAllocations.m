@@ -2,7 +2,7 @@ function verifyRequirementAllocations()
     
     reqSetName = 'ShipRequirements';
     sysComposerModel = 'SYSTEM';
-    outputDir = 'Reports';
+    outputDir = getOutputDir('reports');
     outputFileName = 'UnallocatedReq.txt';
     filePath = fullfile(outputDir, outputFileName);
     
