@@ -61,6 +61,12 @@ classdef test_shipmbse < matlab.unittest.TestCase
                 "shipmbse:propertyInfo:BadPath");
         end
 
+        function propertyInfoForTextProperty(testCase)
+            info = shipmbse.propertyInfo("FuelProfile.FuelConsumer.FuelType", testCase.Model);
+            testCase.verifySize(info, [1 1], "propertyInfo must return a scalar struct for text properties.");
+            testCase.verifyEqual(info.Type, "string");
+        end
+
         function getPropFlagsDefaults(testCase)
             gen = lookup(testCase.Model, 'Path', "MiniShip/GEN");
             [~, ~, isDefault] = shipmbse.getProp(gen, "WeightsCentersProfile.WeightsCenters.TCG", Model=testCase.Model);

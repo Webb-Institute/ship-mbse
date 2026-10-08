@@ -39,7 +39,8 @@ if isempty(p)
         parts(3), parts(1), parts(2));
 end
 
+% Min/Max are empty cells for text properties; wrap them so struct() stays scalar
 info = struct("Name", string(p.Name), "Type", string(p.Type), "Units", string(p.Units), ...
-    "DefaultValue", string(p.DefaultValue), "Min", p.Min, "Max", p.Max);
+    "DefaultValue", string(p.DefaultValue), "Min", {p.Min}, "Max", {p.Max});
 
 end

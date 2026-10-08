@@ -11,6 +11,8 @@ function cfg = config()
 %     FuelSupplyPipes Fuel consumer path -> supplying pipe path (N-by-2)
 %     Stereotypes     Fully qualified stereotype names (Profile.Stereotype)
 %     Excel           Property table file names (on the project path)
+%     MaturityLevels  Allowed DataRecord.Maturity values
+%     FluidDensity    Nominal fluid densities (t/m^3) by upper-case fluid name
 %
 %   See also shipmbse.loadModel, getOutputDir.
 
@@ -63,8 +65,20 @@ cfg.Stereotypes.Criticality         = "CritRelRedProfile.Criticality";
 cfg.Stereotypes.Redundancy          = "CritRelRedProfile.Redundancy";
 cfg.Stereotypes.PortRedundancy      = "PortProfile.Redundancy";
 
+cfg.Stereotypes.DataRecord          = "ShipElementProfile.DataRecord";
+
 % Name of the on/off property shared by resource stereotypes
 cfg.StatusProperty = "Status";
+
+% Allowed values of DataRecord.Maturity, least to most mature
+cfg.MaturityLevels = ["Placeholder", "Parametric", "Calculated", "Vendor", "Measured"];
+
+% Nominal fluid densities at 15 degC (t/m^3), used to convert tank volumes
+% (m^3) to fuel mass (t). Keys are upper-case fluid names as entered in the
+% model. Assumptions; replace with project values when known.
+cfg.FluidDensity = dictionary( ...
+    ["HEAVY FUEL OIL", "MARINE DIESEL OIL", "F-76", "F76", "JP-5", "LUBE OIL"], ...
+    [0.98,             0.89,                0.85,   0.85,  0.81,   0.90]);
 
 % Excel property tables (resolved on the project path)
 cfg.Excel.Properties = "Properties.xlsx";
