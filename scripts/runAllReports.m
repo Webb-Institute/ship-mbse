@@ -1,7 +1,7 @@
 function status = runAllReports()
 %RUNALLREPORTS Run every report and save an analysis snapshot.
 %   status = runAllReports() runs, in order: systemsReport,
-%   GenerateWeightTableReport, verifyRequirementAllocations, fuelAnalysis
+%   generateWeightTableReport, verifyRequirementAllocations, fuelAnalysis
 %   and generateInterfaceReport, then saves a snapshot of the active
 %   configuration (outputs/snapshots) for changeImpactReport. Every report
 %   runs even if an earlier one fails; returns a table of outcomes and
@@ -14,7 +14,7 @@ function status = runAllReports()
 
 reports = {
     "Systems report",      @() systemsReport();
-    "Weight report",       @() GenerateWeightTableReport();
+    "Weight report",       @() generateWeightTableReport();
     "Traceability report", @() verifyRequirementAllocations();
     "Fuel analysis",       @() fuelAnalysis();
     "Interface report",    @() generateInterfaceReport();

@@ -30,6 +30,7 @@ outputs/case_study/*
 !outputs/case_study/.gitkeep
 outputs/snapshots/*
 !outputs/snapshots/.gitkeep
+outputs/test-results/
 
 # --- Legacy report folder (reports now go to outputs/reports) ---
 Reports/

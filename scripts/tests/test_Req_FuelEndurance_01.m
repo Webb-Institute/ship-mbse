@@ -1,17 +1,13 @@
 function tests = test_Req_FuelEndurance_01
+%TEST_REQ_FUELENDURANCE_01 Verifies REQ-402 Usable Fuel Inventory.
+%   Fuel endurance of the active configuration must be at least the linked
+%   requirement's Threshold (days).
 tests = functiontests(localfunctions);
 end
 
 function test_RequirementPassCriteria(testCase)
-% 1. Read PerfVal1 threshold for this specific requirement link
-perfValThreshold = getLinkedPerfVal(mfilename, 'PerfVal1');
-testCase.assertFalse(isnan(perfValThreshold), 'PerfVal1 attribute could not be read from requirement link.');
-
-% 2. Get system endurance from model
-actualSystemDays = getFuelSystemEndurance();
-
-% 3. Verify requirement condition
-testCase.verifyGreaterThanOrEqual(actualSystemDays, perfValThreshold, ...
-    sprintf('Requirement FAILED: System endurance (%.2f days) is below required threshold (%.2f days).', ...
-    actualSystemDays, perfValThreshold));
+[requiredDays, req] = shipmbse.reqValue(mfilename, "Threshold", Units="day");
+actualDays = getFuelSystemEndurance();
+testCase.verifyGreaterThanOrEqual(actualDays, requiredDays, sprintf( ...
+    "%s not met: fuel endurance %.2f days is below the required %.2f days.", req.Id, actualDays, requiredDays));
 end

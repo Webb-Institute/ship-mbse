@@ -66,6 +66,17 @@ classdef test_regressionBaseline < matlab.unittest.TestCase
                 "shipmbse:linkedRequirements:NotFound");
         end
 
+        function requirementValues(testCase)
+            testCase.verifyEqual(shipmbse.reqValue("REQ-402", "Threshold", Units="day"), 100);
+            testCase.verifyEqual(shipmbse.reqValue("test_Req_FuelEndurance_02", "Threshold"), 1);
+            testCase.verifyEqual(shipmbse.reqValue("test_ExistComp_01", "RequiredComponent"), "33X (SHORE POWER)");
+            testCase.verifyError(@() shipmbse.reqValue("REQ-402", "Threshold", Units="h"), "shipmbse:reqValue:UnitMismatch");
+            testCase.verifyError(@() shipmbse.reqValue("REQ-101", "Threshold"), "shipmbse:reqValue:Empty");
+            testCase.verifyError(@() shipmbse.reqValue("REQ-402", "PerfVal1"), "shipmbse:reqValue:NoAttribute");
+            testCase.verifyError(@() shipmbse.reqValue("REQ-999", "Threshold"), "shipmbse:reqValue:NoRequirement");
+            testCase.verifyError(@() shipmbse.reqValue("test_shipmbse", "Threshold"), "shipmbse:reqValue:NoRequirement");
+        end
+
         function snapshotAndReportFiles(testCase)
             snap = shipmbse.snapshot("regression", Model=testCase.Model);   % not saved
             testCase.verifyEqual(snap.Mass.Weight, 18871, AbsTol=1e-6);

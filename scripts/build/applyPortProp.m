@@ -151,9 +151,7 @@ function applyPortProp()
             isPhysicalPort = false;
         end
 
-        baseInterface = "";
-
-        % Alphabetic Designation Matching
+        % Alphabetic Designation Matching (every branch assigns baseInterface)
         if endsWith(baseName, 'CFW', 'IgnoreCase', true)
             baseInterface = "CoolingFW";
 
@@ -292,7 +290,7 @@ function applyPortProp()
 
         archQueue = {};
         if isprop(modelObj, 'Architecture') && ~isempty(modelObj.Architecture)
-            archQueue{end+1} = modelObj.Architecture; %#ok<AGROW>
+            archQueue{end+1} = modelObj.Architecture;
         end
 
         while ~isempty(archQueue)

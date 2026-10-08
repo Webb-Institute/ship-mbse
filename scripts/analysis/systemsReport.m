@@ -12,7 +12,7 @@ function results = systemsReport(cmd)
 %
 %   This report does not modify the model.
 %
-%   See also shipmbse.serviceBalance, GenerateWeightTableReport.
+%   See also shipmbse.serviceBalance, generateWeightTableReport.
 
 arguments
     cmd (1,1) string {mustBeMember(cmd, ["", "clear", "reset"])} = ""

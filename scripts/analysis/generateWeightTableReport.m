@@ -1,12 +1,12 @@
-function weightTable = GenerateWeightTableReport(cmd)
+function weightTable = generateWeightTableReport(cmd)
 %GENERATEWEIGHTTABLEREPORT Weight, margin and centre-of-gravity report.
-%   weightTable = GenerateWeightTableReport() writes
+%   weightTable = generateWeightTableReport() writes
 %   outputs/reports/WeightsAndMarginsReport_Run_NNN.txt listing every active
 %   component with the WeightsCenters stereotype (weight, margin, weight with
 %   margin, LCG, TCG, VCG), followed by ship totals with and without margin.
 %   Returns the component table.
 %
-%   GenerateWeightTableReport("clear") deletes previous runs.
+%   generateWeightTableReport("clear") deletes previous runs.
 %
 %   Table rows and both sets of totals come from the same component set
 %   (shipmbse.massProperties). This report does not modify the model.
@@ -34,7 +34,7 @@ weightTable = table(names, details.Weight, details.MarginPct, details.WeightWith
 fileName = shipmbse.reportFile(prefix);
 fid = fopen(fileName, "wt");
 if fid == -1
-    error("GenerateWeightTableReport:CannotWrite", "Could not open ""%s"" for writing.", fileName);
+    error("generateWeightTableReport:CannotWrite", "Could not open ""%s"" for writing.", fileName);
 end
 closeFile = onCleanup(@() fclose(fid));
 
