@@ -37,12 +37,9 @@ software defects.
 - **Fuel endurance fails REQ-402/403:** 5.79 days (heavy fuel oil limits) vs. 100 days required.
   The old script reported "250,000 days" because it returned seconds and double-counted demand.
 - **Waste water shortfall:** production 26 kL/s vs. receiving capacity 25 kL/s.
-- **Fuel system summary values disagree with its components** (`fuelAnalysis` roll-up): e.g. the
-  weight on `52X FUEL` is 401 t, but its components sum to 239.6 t; LCG 133 m vs. 43 m.
-  Ship-level reports use the 52X value. Decide which is authoritative.
-- **Unset numeric properties read as 0.** The profiles default numeric properties to `0`, so a
-  value that was never entered cannot be told apart from a real zero. `shipmbse.getProp` flags
-  values equal to the default. Changing profile defaults to `NaN` is planned with the units work.
+- **Placeholder magnitudes:** the unit migration converted existing placeholder values
+  numerically, so several are not physical (e.g. lube oil demand in thousands of t/h, solid
+  waste in hundreds of millions of kg/day). All rows are `Maturity = Placeholder`.
 - Components implementing no requirement: `520 (FUEL INTAKE/RETURN)`, `529 (FO POWER
   DISTRIBUTION)` (plus the 500/600 group levels and ENVIRONMENT/STAKEHOLDERS).
 
@@ -66,8 +63,17 @@ Phase 1. Remaining:
 | Location | Issue |
 |---|---|
 | `scripts/build/applyPortProp.m` | Interface inferred from the port-name tag (any name ending in "C" becomes Control); mismatched interfaces on connected ports are overwritten without a report. To be replaced by explicit interface assignment |
-| `scripts/build/applyProperties.m` | No header validation; values written as text; a variant container's values are applied to all its choices (ABSENT included); result depends on the order tables are applied |
 | Linked test files | Requirement links are stored as character ranges; after editing a linked test outside the MATLAB Editor, run `updateTestLinkRanges` |
+
+## Data files and profiles
+
+- `data/input_tables/CaseSpecificProperties/CaseSpecificProperties.xlsx` is **legacy and unused**.
+  It was not migrated to the new units, and it names variant containers, which `applyProperties`
+  rejects. Migrate or delete it before using it.
+- `FuelComponentProfile` still defines deprecated duplicate properties (`PowerRequired`,
+  `LubeConsumption`, `CoolConsumption`, `HeatConsumed`, `WasteOilProduced`, and the `Weights`
+  stereotype). They are unused and will be removed in the profile consolidation.
+- Duplicate `Redundancy` stereotypes (CritRelRedProfile and PortProfile) remain.
 
 ## Repository
 

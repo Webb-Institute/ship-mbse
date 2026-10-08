@@ -33,12 +33,18 @@ scripts. For specific defects, see [`handoff/known_issues.md`](../handoff/known_
 
 ## Limitations
 
-- **Placeholder data:** property values in `data/input_tables/*.xlsx` are illustrative, not
-  engineering estimates. Totals, margins and test outcomes are **not meaningful for design
-  decisions** yet.
-- **Units:** several flow quantities use kL/s, which doesn't suit fuel, air or waste streams.
-  Units are defined in the profiles and reported with every value; only time conversion
-  (endurance) is implemented, and balances refuse to compare quantities with different units.
+- **Placeholder data:** every property value is `Maturity = Placeholder`, not an engineering
+  estimate. Totals, margins and test outcomes are **not meaningful for design decisions** yet.
+  Replace values row by row and raise the row's Maturity as you do.
+- **Units** (October 2026): fuel and lube rates t/h, fuel stored t, tank volumes m³, pipe and
+  pump flows m³/h, compressed air Nm³/h, waste gas kg/h, waste water and waste oil m³/day,
+  solid waste kg/day, power and heat kW. Units are defined in the profiles and reported with
+  every value. Balances refuse to compare quantities with different units.
+- **Densities:** tank volumes are converted to fuel mass with nominal densities (HFO 0.98, MDO
+  0.89, F-76 0.85, JP-5 0.81, lube 0.90 t/m³) in `shipmbse.config`.
+- **Migrated values:** the October 2026 unit migration converted the existing placeholder values
+  numerically, so some magnitudes are not physical (e.g. lube oil in thousands of t/h). Every
+  such row is marked `Maturity = Placeholder`; reports say when all data is placeholder.
 - **Interfaces** have no elements, so no flow, pressure, temperature, voltage or data content is
   modeled or checked at connections.
 - **No operating conditions** (in-port, transit, mission, emergency). Electrical and fluid

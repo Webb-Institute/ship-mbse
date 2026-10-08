@@ -36,9 +36,10 @@ compT.Change = fillmissing(compT.Current, 'constant', 0) - fillmissing(compT.Bas
 compT = compT(compT.Change ~= 0 | xor(isnan(compT.Baseline), isnan(compT.Current)), :);
 
 % --- Service balances -----------------------------------------------------------
-balT = table(base.Balance.Domain, base.Balance.Margin, curr.Balance.Margin, curr.Balance.Unit, ...
-    'VariableNames', {'Domain', 'BaselineMargin', 'CurrentMargin', 'Unit'});
+balT = table(base.Balance.Domain, base.Balance.Margin, base.Balance.Unit, curr.Balance.Margin, curr.Balance.Unit, ...
+    'VariableNames', {'Domain', 'BaselineMargin', 'BaselineUnit', 'CurrentMargin', 'Unit'});
 balT.Change = balT.CurrentMargin - balT.BaselineMargin;
+balT.Change(balT.BaselineUnit ~= balT.Unit) = NaN;   % units changed: no meaningful difference
 
 % --- Endurance -------------------------------------------------------------------
 endT = table(base.EnduranceDays, curr.EnduranceDays, curr.EnduranceDays - base.EnduranceDays, ...
@@ -113,9 +114,14 @@ end
 fprintf(fid, "\n3. SERVICE BALANCE MARGINS (capacity - demand)\n%-16s | %12s | %12s | %12s | %s\n", ...
     "Domain", "Baseline", "Current", "Change", "Unit");
 for k = 1:height(impact.Balance)
-    fprintf(fid, "%-16s | %12.6g | %12.6g | %+12.6g | %s\n", impact.Balance.Domain(k), ...
-        impact.Balance.BaselineMargin(k), impact.Balance.CurrentMargin(k), impact.Balance.Change(k), ...
-        impact.Balance.Unit(k));
+    b = impact.Balance(k, :);
+    if b.BaselineUnit == b.Unit
+        fprintf(fid, "%-16s | %12.6g | %12.6g | %+12.6g | %s\n", b.Domain, b.BaselineMargin, ...
+            b.CurrentMargin, b.Change, b.Unit);
+    else
+        fprintf(fid, "%-16s | %12.6g | %12.6g | %12s | %s -> %s (units changed; not comparable)\n", ...
+            b.Domain, b.BaselineMargin, b.CurrentMargin, "-", b.BaselineUnit, b.Unit);
+    end
 end
 
 fprintf(fid, "\n4. FUEL ENDURANCE\n  %.3f -> %.3f days (%+.3f)\n%s\n", impact.Endurance.BaselineDays, ...

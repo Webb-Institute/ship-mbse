@@ -61,10 +61,39 @@ classdef test_shipmbse < matlab.unittest.TestCase
                 "shipmbse:propertyInfo:BadPath");
         end
 
-        function getPropFlagsDefaults(testCase)
+        function propertyInfoForTextProperty(testCase)
+            info = shipmbse.propertyInfo("FuelProfile.FuelConsumer.FuelType", testCase.Model);
+            testCase.verifySize(info, [1 1], "propertyInfo must return a scalar struct for text properties.");
+            testCase.verifyEqual(info.Type, "string");
+        end
+
+        function unsetValuesAreNaN(testCase)
+            % Numeric profile defaults are NaN, so a value never entered is distinguishable from 0
+            diesel = lookup(testCase.Model, 'Path', "MiniShip/PROP/DIESEL");
+            [v, ~, isDefault] = shipmbse.getProp(diesel, "ElectricalProfile.ElectricalConsumer.PowerFactor", Model=testCase.Model);
+            testCase.verifyTrue(isnan(v));
+            testCase.verifyTrue(isDefault);
             gen = lookup(testCase.Model, 'Path', "MiniShip/GEN");
-            [~, ~, isDefault] = shipmbse.getProp(gen, "WeightsCentersProfile.WeightsCenters.TCG", Model=testCase.Model);
-            testCase.verifyTrue(isDefault, "TCG = 0 equals the profile default and must be flagged.");
+            [v, ~, isDefault] = shipmbse.getProp(gen, "WeightsCentersProfile.WeightsCenters.TCG", Model=testCase.Model);
+            testCase.verifyEqual(v, 0);
+            testCase.verifyFalse(isDefault, "An entered 0 is not the (NaN) default.");
+        end
+
+        function sumPropertyExcludesMissing(testCase)
+            diesel = lookup(testCase.Model, 'Path', "MiniShip/PROP/DIESEL");
+            p = "ElectricalProfile.ElectricalConsumer.PowerRequired";
+            diesel.setProperty(p, "NaN");
+            testCase.addTeardown(@() diesel.setProperty(p, "5"));
+            [total, det] = shipmbse.sumProperty(p, OnlyIfOn=true, Model=testCase.Model);
+            testCase.verifyEqual(total, 8);   % DIESEL missing, LOADS2 off
+            testCase.verifyEqual(sum(det.Missing), 1);
+        end
+
+        function dataMaturitySummary(testCase)
+            [rec, summary] = shipmbse.dataMaturity(testCase.Model);
+            testCase.verifyEqual(rec.Maturity(shipmbse.pathLeaf(rec.Path) == "PLATE"), "Vendor");
+            testCase.verifyEqual(sum(rec.Maturity == "<none>"), height(rec) - 1);
+            testCase.verifySubstring(summary, "1 Vendor");
         end
 
         % --- Sums and balances ---------------------------------------------------
@@ -99,7 +128,7 @@ classdef test_shipmbse < matlab.unittest.TestCase
         % --- Fuel endurance ------------------------------------------------------
         function fuelEndurancePooledStorage(testCase)
             [days, byFuel, consumers] = shipmbse.fuelEndurance(testCase.Model);
-            testCase.verifyEqual(days, 100 / 0.0015 / 86400, RelTol=1e-12);
+            testCase.verifyEqual(days, 1, RelTol=1e-12);   % 36 t / (1.0 + 0.5) t/h = 24 h
             testCase.verifyEqual(byFuel.Fuel, "F76");
             testCase.verifyEqual(height(consumers), 2);   % DIESEL and GEN; ELECTRIC inactive
         end
@@ -108,6 +137,7 @@ classdef test_shipmbse < matlab.unittest.TestCase
             testCase.verifyEqual(shipmbse.durationToDays(86400, "kL", 1, "kL/s"), 1);
             testCase.verifyEqual(shipmbse.durationToDays(24, "m3", 1, "m3/h"), 1);
             testCase.verifyEqual(shipmbse.durationToDays(10, "kL", 2, "kL/day"), 5);
+            testCase.verifyEqual(shipmbse.durationToDays(48, "t", 2, "t/h"), 1);
             testCase.verifyError(@() shipmbse.durationToDays(1, "t", 1, "kL/s"), ...
                 "shipmbse:durationToDays:UnitMismatch");
             testCase.verifyError(@() shipmbse.durationToDays(1, "kL", 1, "kL/week"), ...

@@ -7,12 +7,13 @@ function model = buildMiniShip(name)
 %   Component           Weight  LCG  VCG  TCG  Margin  Other
 %   HULL/PLATE            100    10    5    0    10%
 %   HULL/FRAME             50    20    6    2     0%
-%   PROP/DIESEL (active)   30    40    3   -1    20%   5 kW load (on); 0.001 kL/s F76 (on)
+%   PROP/DIESEL (active)   30    40    3   -1    20%   5 kW load (on); 1.0 t/h F76 (on)
 %   PROP/ELECTRIC          999   99   99   99     0%   500 kW load (on) -- INACTIVE choice
-%   GEN                    20    30    4    0     0%   20 kW generator (on); 0.0005 kL/s F76 (on)
+%   GEN                    20    30    4    0     0%   20 kW generator (on); 0.5 t/h F76 (on)
 %   LOADS                                             8 kW load (on)
 %   LOADS2                                            100 kW load (OFF)
-%   FUEL                                              100 kL stored
+%   FUEL                                              36 t stored
+%   PLATE also has a DataRecord (Maturity Vendor); no other component has one.
 %
 %   Connections: GEN.P -> LOADS.P, and GEN.Q -> PROP.Q (resolved to DIESEL.Q).
 
@@ -24,7 +25,7 @@ if bdIsLoaded(name)
     bdclose(name);
 end
 model = systemcomposer.createModel(name);
-for p = ["WeightsCentersProfile", "ElectricalProfile", "FuelProfile", "PortProfile"]
+for p = ["WeightsCentersProfile", "ElectricalProfile", "FuelProfile", "PortProfile", "ShipElementProfile"]
     model.applyProfile(p);
 end
 arch = model.Architecture;
@@ -47,7 +48,7 @@ diesel = choices(1);
 electric = choices(2);
 setWeight(diesel, wc, 30, 40, 3, -1, 20);
 setStereo(diesel, ec, "PowerRequired", "5", "Status", "true");
-setStereo(diesel, fc, "FuelRequired", "0.001", "Status", "true", "FuelType", "'F76'");
+setStereo(diesel, fc, "FuelRequired", "1.0", "Status", "true", "FuelType", "'F76'");
 setWeight(electric, wc, 999, 99, 99, 99, 0);
 setStereo(electric, ec, "PowerRequired", "500", "Status", "true");
 prop.setActiveChoice(diesel);
@@ -55,7 +56,7 @@ prop.setActiveChoice(diesel);
 gen = arch.addComponent("GEN");
 setWeight(gen, wc, 20, 30, 4, 0, 0);
 setStereo(gen, eg, "PowerGenerated", "20", "Status", "true");
-setStereo(gen, fc, "FuelRequired", "0.0005", "Status", "true", "FuelType", "'F76'");
+setStereo(gen, fc, "FuelRequired", "0.5", "Status", "true", "FuelType", "'F76'");
 
 loads = arch.addComponent("LOADS");
 setStereo(loads, ec, "PowerRequired", "8", "Status", "true");
@@ -63,7 +64,8 @@ loads2 = arch.addComponent("LOADS2");
 setStereo(loads2, ec, "PowerRequired", "100", "Status", "false");
 
 fuel = arch.addComponent("FUEL");
-setStereo(fuel, fp, "FuelStored", "100", "Status", "true");
+setStereo(fuel, fp, "FuelStored", "36", "Status", "true");
+setStereo(plate, "ShipElementProfile.DataRecord", "Maturity", "'Vendor'", "DataSource", "'Test fixture'");
 
 % Connections: a direct one and one through the variant container
 gen.Architecture.addPort("P", "out");

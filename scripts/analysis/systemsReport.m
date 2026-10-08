@@ -39,6 +39,8 @@ fprintf(fid, "%s\n%s\n%s\n", repmat('=', 1, width), centre("VESSEL SYSTEMS REPOR
 fprintf(fid, "Model: %s   Generated: %s\n", model.Name, string(datetime("now", "Format", "yyyy-MM-dd HH:mm")));
 fprintf(fid, "Totals include only components in the active configuration whose Status is On.\n");
 fprintf(fid, "Margin = capacity - demand; a negative margin is a shortfall.\n");
+[~, maturity] = shipmbse.dataMaturity(model);
+fprintf(fid, "%s\n", maturity);
 
 for d = 1:numel(details)
     fprintf(fid, "\n\n%s\n%s\n", centre(details(d).Domain, width), repmat('-', 1, width));

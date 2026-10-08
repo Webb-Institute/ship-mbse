@@ -153,29 +153,39 @@ The rules below are the intended design rules. They are not yet enforced automat
 
 ## **5\. Stereotype & Profile Data Dictionary**
 
-Metadata assignment is split into high-level system profiles (Properties.xlsx) and detailed component profiles (FuelProp.xlsx).
+Property values are entered in two Excel tables (`data/input_tables/`): `Properties.xlsx` for ship-level data, and `FuelProp.xlsx` for the fuel system's components. `rebuildProperties` applies them to the model (Section 7.1). Units are defined in the profiles; the tables' unit row must match.
 
-### **5.1 Global System Profiles (Properties.xlsx)**
+Numeric properties default to `NaN`. A value that was never entered reads as `NaN`, is reported as *missing*, and is never summed as zero.
 
-| Profile Name | Stereotype Name | Properties & Units |
-| :---: | :---: | :---: |
-| WeightsCentersProfile | WeightsCenters | Weight (t), LCG (m), VCG (m), TCG (m), WeightMargin (%) |
-| ElectricalProfile | ElectricalConsumer, ElectricalGenerator | PowerRequired (kW), PowerGenerated (kW), Status (On/Off) |
-| FuelProfile | FuelConsumer, FuelProducer | FuelRequired (kL/s), FuelProduced (kL/s), FuelStored (kL), FuelType (string) |
-| CoolingProfile | CoolConsumer, CoolProducer | CoolConsumed (kL/s), CoolProduced (kW), Status (On/Off) |
-| LubeProfile | LubeConsumer, LubeProducer | LubeRequired (kL/s), LubeProduced (kL/s), Status (On/Off) |
-| CompAirProfile | AirConsumer, AirProducer | AirConsumed (kL/s), AirProduced (kL/s), Status (On/Off) |
-| WasteProfile | WasteGasProducer / Receiver WasteOilProducer / Receiver WasteWaterProducer / Receiver WasteSolidProducer / Receiver   | WGProduced (kL/s), WSProduced (kL/s), WWProduced (kL/s), WOProduced (kL/s), WGReceived (kL/s) |
-| HeatProfile | HeatConsumer ,  HeatProducer | HeatConsumed (kW), HeatProduced (kW), Status (On/Off) |
+### **5.1 Ship-level profiles**
 
-### **5.2 Subsystem Detailed Profiles (FuelProp.xlsx)**
+| Profile | Stereotypes | Properties (units) |
+| :--- | :--- | :--- |
+| WeightsCentersProfile | WeightsCenters | Weight (t), LCG / VCG / TCG (m), WeightMargin (%) |
+| ElectricalProfile | ElectricalConsumer, ElectricalGenerator | PowerRequired, PowerGenerated (kW); PowerFactor; Status |
+| FuelProfile | FuelConsumer, FuelProducer | FuelRequired (t/h), FuelType (text); FuelProduced (t/h), FuelStored (t); Status |
+| LubeProfile | LubeConsumer, LubeProducer | LubeRequired, LubeProduced (t/h); LubeStored (m³); Status |
+| CoolingProfile | CoolConsumer, CoolProducer | CoolConsumed, CoolProduced (kW heat load); Status |
+| CompAirProfile | AirConsumer, AirProducer | AirConsumed, AirProduced (Nm³/h); Status |
+| HeatProfile | HeatConsumer, HeatProducer | HeatConsumed, HeatProduced (kW); Status |
+| WasteProfile | WasteGas/Oil/Water/SolidProducer, WasteReceiver | Waste gas (kg/h); waste oil and waste water (m³/day); solid waste (kg/day); Status |
+| ShipElementProfile | DataRecord | Maturity (Placeholder, Parametric, Calculated, Vendor, Measured), DataSource (text) |
+| CritRelRedProfile, PortProfile | Criticality, Redundancy, Reliability | Scores (unitless) |
 
-| Stereotype | Key Stereotype Properties |
-| :---: | :---: |
-| Tank | PrimaryFluidCapacity, SecondaryFluidCapacity, TertiaryFluidCapacity (kL); PriFluid, SecFluid, TerFluid (string) |
-| Pump | PowerRequired (kW), MaxFlowCapacity (kL/s), Pri/Sec/TerFlowRate (kL/s), Lube/CoolConsumption |
-| Pipe | Diameter (m), Length (m), FlowRate (kL/s), FluidDensity (kg/kL), Fluid (string) |
-| FluidConditioner | HeatConsumed (kW), WasteOilProduced (kL/s), Pri/Sec/TerFlowRate (kL/s) |
+Volume and mass are linked by nominal fluid densities in `shipmbse.config().FluidDensity` (t/m³ at 15 °C): HFO 0.98, MDO 0.89, F-76 0.85, JP-5 0.81, lube oil 0.90. These are assumptions; replace them with project values when known.
+
+### **5.2 Fuel system component profile (FuelComponentProfile)**
+
+| Stereotype | Properties (units) |
+| :--- | :--- |
+| Tank | Primary/Secondary/Tertiary FluidCapacity and FluidLevel (m³); PriFluid/SecFluid/TerFluid (text) |
+| Pump, FluidConditioner | MaxFlowCapacity, Pri/Sec/TerFlowRate (m³/h); fluids (text); Status |
+| Pipe | Diameter, Length (m); FlowRate (m³/h); FluidDensity (kg/m³); Fluid (text); Status |
+| Controller | Status |
+
+**The fuel system's totals are the sum of its components** (decision, October 2026). The fuel system component `52X FUEL` carries no weight, power or other summary values of its own. Its parts (520–529) carry the ship-level stereotypes (WeightsCenters, ElectricalConsumer, CoolConsumer, LubeConsumer, HeatConsumer, WasteOilProducer, and FuelProducer on the supply pipes), so ship totals include them. `fuelAnalysis` reports the fuel system totals and flags any summary value put back on `52X FUEL`.
+
+`FuelComponentProfile` still defines `PowerRequired`, `LubeConsumption`, `CoolConsumption`, `HeatConsumed`, `WasteOilProduced` and the `Weights` stereotype. They are **deprecated and unused**: use the ship-level stereotypes instead. They will be removed in the profile consolidation.
 
 ## **6\. Scripts: Shared Package, Analyses, Build Utilities**
 
@@ -252,15 +262,23 @@ Building and expanding the SYSTEM model involves defining component blocks, esta
 
 ### **7.1 Component Excel Sheet Structure & Mapping Rules**
 
-The metadata assignment script reads component properties using a standardized 4-row header layout:
+`applyProperties` reads each table using a 4-row header:
 
-| Row Range | Content Description | Template Examples |
-| :---: | :---: | :---: |
-| **Row 1** | Profile Names | WeightsCentersProfile, ElectricalProfile, FuelProfile |
-| **Row 2** | Stereotype Names | WeightsCenters, ElectricalConsumer, FuelConsumer |
-| **Row 3** | Property Names | Weight, LCG, VCG, TCG, WeightMargin, PowerRequired, Status |
-| **Row 4** | Units / Description Header | (t), (m), %, (kW), On/Off, kL/s |
-| **Row 5+** | Component Names & Values | Component or variant Name in Column A; property values across active columns, N/A if property is not applied |
+| Row | Content | Examples |
+| :--- | :--- | :--- |
+| **1** | Profile | WeightsCentersProfile, ShipElementProfile |
+| **2** | Stereotype | WeightsCenters, DataRecord |
+| **3** | Property | Weight, LCG, Maturity, DataSource |
+| **4** | Units: **must equal the profile's units** for numeric properties (parentheses optional); `On/Off` for booleans; `string` or a list of allowed values for text | (t), t/h, Nm^3/h, On/Off |
+| **5+** | Column A: component or **variant choice** name; then values. `N/A` or blank = no value | `20X DIESEL ENGINE`, 682, TRUE |
+
+Every table starts with the two `ShipElementProfile.DataRecord` columns, **Maturity** and **DataSource**. Fill them for every row that has data.
+
+Rules enforced by `applyProperties` (all problems are reported together, before anything changes):
+* Unknown profiles, stereotypes, properties or components; unit mismatches; non-numeric values in numeric columns; and invalid Maturity values are errors.
+* Rows must name a component or a variant **choice**, never a variant container.
+* A stereotype is applied when the row has a value for it, and removed when all its columns are N/A. N/A inside an applied stereotype means "not known" (NaN).
+* Applying a table twice, or the two tables in either order, gives the same model. Use `applyProperties(file, DryRun=true)` to validate only.
 
 ### 
 
@@ -278,7 +296,7 @@ The automated script applyPortProp() parses port names using a standardized mult
 
 1. Create the System Composer component.  
 2. Add its stereotypes and property values to the Excel property tables.  
-3. Run `rebuildProperties` (or `applyProperties(file)`) and save the model.  
+3. Run `rebuildProperties(Save=true)`. It validates both tables first, then strips and reapplies.  
 4. Allocate requirements to it (Implement links) in the Requirements Editor.  
 5. Add or update verification tests (Section 8.4).  
 6. Run `buildtool` (checks and code tests), `buildtool verify trace`, and `runAllReports`.  

@@ -1,16 +1,33 @@
-function rebuildProperties()
-%REBUILDPROPERTIES Strip all stereotype properties and re-apply them from Excel.
-%   rebuildProperties() removes stereotype property values from the SYSTEM
-%   model with stripProperties, then re-applies FuelProp.xlsx followed by
-%   Properties.xlsx with applyProperties. This modifies the model.
+function rebuildProperties(opts)
+%REBUILDPROPERTIES Strip all stereotypes and re-apply them from the Excel tables.
+%   rebuildProperties() removes every component stereotype from the model
+%   named in shipmbse.config (stripProperties), then applies the property
+%   tables listed in shipmbse.config().Excel (applyProperties). Both tables
+%   are validated before anything is stripped. This MODIFIES THE MODEL.
 %
-%   Application order matters: values from Properties.xlsx overwrite any
-%   overlapping values from FuelProp.xlsx.
+%   rebuildProperties(Save=true) also saves the model.
+%
+%   The tables cover different stereotypes and components, so the order in
+%   which they are applied does not matter.
 %
 %   See also stripProperties, applyProperties.
 
+arguments
+    opts.Save (1,1) logical = false
+end
+
+cfg = shipmbse.config();
+tables = string(struct2cell(cfg.Excel))';
+for t = tables
+    applyProperties(t, DryRun=true);   % fail before stripping if a table is invalid
+end
 stripProperties();
-applyProperties('FuelProp.xlsx');
-applyProperties('Properties.xlsx');
+for t = tables
+    applyProperties(t);
+end
+if opts.Save
+    shipmbse.loadModel().save;
+    disp("Model saved.");
+end
 
 end

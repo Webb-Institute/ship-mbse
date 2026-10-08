@@ -13,9 +13,10 @@
       <metaAttributes type="mf.zero.meta.AttributeMap" uuid="a313053c-8c07-467f-ab75-eb6675c0c518"/>
       <propertySet type="systemcomposer.property.PropertySet" uuid="62fce045-9527-423d-a46d-7b5580976c3b">
         <properties type="systemcomposer.property.PropertyDefinition" uuid="1f59e585-0fdc-4685-8561-71c5df07c082">
-          <currentVersionId>38a459da-5d8b-4504-9138-850a84d188e9</currentVersionId>
+          <currentVersionId>d35acbda-7fb9-462d-8bc3-ff7ee80efa28</currentVersionId>
           <p_Name>CoolConsumed</p_Name>
           <defaultValue type="systemcomposer.property.Value" uuid="d4ef862a-38af-480f-b3cf-e4f63fcdc963">
+            <storedExpression>NaN</storedExpression>
             <units>kW</units>
             <valueTypeProxy type="systemcomposer.services.proxy.ProxySource" uuid="58e4d046-b3a8-492a-9394-ee891ba36308">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="d65ff1a4-c51c-4631-bda0-5d378a6de0fa"/>
@@ -78,9 +79,10 @@
       <metaAttributes type="mf.zero.meta.AttributeMap" uuid="60ac5f39-18a7-4064-97bf-95762755905d"/>
       <propertySet type="systemcomposer.property.PropertySet" uuid="22d66e50-3986-4190-a401-a54fd24057de">
         <properties type="systemcomposer.property.PropertyDefinition" uuid="97fadd7e-4308-4270-ace9-9681d58bafb9">
-          <currentVersionId>4aacc59a-8d48-4bef-8b28-7258df79a014</currentVersionId>
+          <currentVersionId>6e97ae17-09b7-4733-85d0-ffccbd4d6dba</currentVersionId>
           <p_Name>CoolProduced</p_Name>
           <defaultValue type="systemcomposer.property.Value" uuid="9dc5491e-51f0-46f7-8007-eeebc72a6ae0">
+            <storedExpression>NaN</storedExpression>
             <units>kW</units>
             <valueTypeProxy type="systemcomposer.services.proxy.ProxySource" uuid="2b62e9f7-d80d-457e-9d3f-81ddfdd506b4">
               <Proxy type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="ae1e3002-6b0f-4adf-ab99-83847e992276"/>
@@ -193,11 +195,12 @@
     <p_Name>CoolingProfile</p_Name>
     <elemProxy type="systemcomposer.services.proxy.ProxyTarget" uuid="fb276699-275b-441f-9bf5-5fae17c79ce0"/>
   </systemcomposer.profile.Profile>
-  <systemcomposer.property.UnitQueryClientWrapper type="systemcomposer.property.UnitQueryClientWrapper" uuid="5bd07fb1-20a1-4072-8212-7fcd5212129f"/>
+  <systemcomposer.services.proxy.WorkspaceWrapper type="systemcomposer.services.proxy.WorkspaceWrapper" uuid="e2e87c43-5e8b-442f-91f9-c260e216666d"/>
   <systemcomposer.services.proxy.ModelIdentifier type="systemcomposer.services.proxy.ModelIdentifier" uuid="a300b543-515e-42d1-900e-84331cdc61f4">
     <URI>CoolingProfile</URI>
     <modelType>PROFILE_MODEL</modelType>
   </systemcomposer.services.proxy.ModelIdentifier>
+  <systemcomposer.property.UnitQueryClientWrapper type="systemcomposer.property.UnitQueryClientWrapper" uuid="5bd07fb1-20a1-4072-8212-7fcd5212129f"/>
   <systemcomposer.services.proxy.ModelResolver type="systemcomposer.services.proxy.ModelResolver" uuid="f83b1d71-2367-4345-b309-b4572ad6e2c7">
     <Proxies type="systemcomposer.services.proxy.UnidirectionalProxy" uuid="9ead1e44-13ab-4df1-b66e-4454769f089f">
       <Source type="systemcomposer.services.proxy.ProxySource" uuid="897b577e-7b41-4dbc-89ba-bde073dce8f3"/>
@@ -242,4 +245,6 @@
       <TargetId>e1e09808-5b7c-486f-ae2c-be90354b6cbe</TargetId>
     </Proxies>
   </systemcomposer.services.proxy.ModelResolver>
+  <systemcomposer.services.proxy.WorkspaceWrapper type="systemcomposer.services.proxy.WorkspaceWrapper" uuid="3d33be36-d5ee-40c7-ae11-9316d1aea25c"/>
+  <systemcomposer.services.proxy.WorkspaceWrapper type="systemcomposer.services.proxy.WorkspaceWrapper" uuid="8da50298-c9eb-4214-9649-325b9b69efe7"/>
 </MF0>

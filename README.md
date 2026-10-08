@@ -14,7 +14,8 @@ Early concept architecture, under active cleanup (October 2026).
   have no elements yet.
 - **Requirements:** 122 requirements in `ShipRequirements.slreqx`, allocated to components, all
   links resolving.
-- **Property data** in `data/input_tables/` is **placeholder** and not engineering data.
+- **Property data** in `data/input_tables/` is **placeholder** (every row `Maturity = Placeholder`)
+  and not engineering data.
 - **Tools:** shared `+shipmbse` package with code tests (96% coverage), Code Analyzer clean.
 - **Verification:** 8 requirement tests; REQ-402/403 (fuel endurance) currently **fail** on the
   placeholder data (5.8 days vs. 100 required).

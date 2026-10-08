@@ -1,5 +1,5 @@
 function [links, rollup] = fuelAnalysis()
-%FUELANALYSIS Validate fuel-system connections and compare child roll-ups with the parent.
+%FUELANALYSIS Validate fuel-system connections and total the fuel system's components.
 %   [links, rollup] = fuelAnalysis() analyses the active fuel system (the
 %   active choice of shipmbse.config().Paths.Fuel) and writes
 %   outputs/reports/FuelAnalysisReport.txt.
@@ -14,11 +14,12 @@ function [links, rollup] = fuelAnalysis()
 %          TerFluid, PriFlowRate, SecFlowRate, TerFlowRate) must be equal.
 %      links: one row per check (Ends, Check, Result, Detail).
 %
-%   2. Roll-up comparison: sums (or weight-averaged centres) of child
-%      properties over children that are on, compared with the value held
-%      on the fuel system component itself. Nothing is written to the
-%      model. rollup: Property, ChildRollup, ParentProperty, ParentValue,
-%      Difference.
+%   2. Fuel system totals: the ship-level properties (weight, electrical,
+%      cooling, lube, heat, waste oil, fuel delivered) summed over the fuel
+%      system's components, plus their weight-weighted centre of gravity.
+%      By decision (2026-10-08) the component sum is authoritative: the
+%      report flags any summary value still held on the fuel system itself.
+%      rollup: Property, ComponentSum, Unit, NumComponents, ParentValue.
 %
 %   Run propagatePipeFluids first to copy consumer fuel types onto pipes.
 %   This analysis does not modify the model.
@@ -59,46 +60,34 @@ for k = 1:numel(conns)
     end
 end
 
-% --- 2. Roll-up comparison -----------------------------------------------------
-%            Child property      Operation  Parent property
-rules = ["PowerRequired",    "SUM", st.ElectricalConsumer + ".PowerRequired";
-         "Weight",           "SUM", st.WeightsCenters + ".Weight";
-         "LubeConsumption",  "SUM", st.LubeConsumer + ".LubeRequired";
-         "CoolConsumption",  "SUM", st.CoolConsumer + ".CoolConsumed";
-         "WasteOilProduced", "SUM", st.WasteOilProducer + ".WOProduced";
-         "HeatConsumed",     "SUM", st.HeatConsumer + ".HeatConsumed";
-         "FlowRate",         "SUM", st.FuelProducer + ".FuelProduced";
-         "LCG",              "COG", st.WeightsCenters + ".LCG";
-         "VCG",              "COG", st.WeightsCenters + ".VCG";
-         "TCG",              "COG", st.WeightsCenters + ".TCG"];
-[children, cpaths] = shipmbse.activeComponents(model);
-inFuel = startsWith(cpaths, fuelPath + "/" + escape(fuel.Name) + "/");
-children = children(inFuel);
-childProps = arrayfun(@readAll, children, 'UniformOutput', false);
-childOn = cellfun(@isOn, childProps);
-childWeight = cellfun(@(p) firstNumber(p, "Weight"), childProps);
-
-n = size(rules, 1);
-rollup = table(rules(:, 1), nan(n, 1), rules(:, 3), nan(n, 1), nan(n, 1), ...
-    'VariableNames', {'Property', 'ChildRollup', 'ParentProperty', 'ParentValue', 'Difference'});
+% --- 2. Fuel system totals = sum of its components -------------------------
+% Decision 2026-10-08: the fuel system's values are the sum of its parts; the
+% fuel system component itself must not carry its own summary values.
+prefix = fuelPath + "/" + escape(fuel.Name) + "/";
+props = [st.WeightsCenters + ".Weight", st.ElectricalConsumer + ".PowerRequired", ...
+         st.CoolConsumer + ".CoolConsumed", st.LubeConsumer + ".LubeRequired", ...
+         st.HeatConsumer + ".HeatConsumed", st.WasteOilProducer + ".WOProduced", ...
+         st.FuelProducer + ".FuelProduced"]';
+n = numel(props);
+rollup = table(props, nan(n, 1), strings(n, 1), zeros(n, 1), nan(n, 1), ...
+    'VariableNames', {'Property', 'ComponentSum', 'Unit', 'NumComponents', 'ParentValue'});
 for r = 1:n
-    vals = cellfun(@(p) firstNumber(p, rules(r, 1)), childProps);
-    use = childOn & ~isnan(vals);
-    if rules(r, 2) == "COG"
-        use = use & childWeight > 0;
-        if any(use)
-            rollup.ChildRollup(r) = sum(vals(use) .* childWeight(use)) / sum(childWeight(use));
-        end
-    elseif any(use)
-        rollup.ChildRollup(r) = sum(vals(use));
-    end
-    if fuel.hasProperty(rules(r, 3))
-        rollup.ParentValue(r) = shipmbse.getProp(fuel, rules(r, 3));
+    onlyIfOn = ~startsWith(props(r), st.WeightsCenters);
+    [~, det] = shipmbse.sumProperty(props(r), OnlyIfOn=onlyIfOn, Model=model);
+    det = det(startsWith(det.Path, prefix) & det.Included, :);
+    rollup.ComponentSum(r) = sum(det.Value);
+    rollup.NumComponents(r) = height(det);
+    rollup.Unit(r) = shipmbse.propertyInfo(props(r), model).Units;
+    if fuel.hasProperty(props(r))
+        rollup.ParentValue(r) = shipmbse.getProp(fuel, props(r));
     end
 end
-rollup.Difference = rollup.ChildRollup - rollup.ParentValue;
+[~, massDet] = shipmbse.massProperties(Model=model);
+massDet = massDet(startsWith(massDet.Path, prefix) & massDet.HasCenters, :);
+w = massDet.Weight;
+centres = [sum(w .* massDet.LCG), sum(w .* massDet.VCG), sum(w .* massDet.TCG)] / sum(w);
 
-writeReport(fuel, links, rollup, sum(~childOn), numel(children));
+writeReport(fuel, links, rollup, centres);
 
 end
 
@@ -203,16 +192,6 @@ if isKey(props, "Status")
 end
 end
 
-function v = firstNumber(props, name)
-v = NaN;
-if isKey(props, name)
-    vals = props{name};
-    if isnumeric(vals{1})
-        v = double(vals{1});
-    end
-end
-end
-
 function v = firstText(props, name)
 v = "";
 if isKey(props, name)
@@ -225,7 +204,7 @@ function s = escape(name)
 s = replace(string(name), "/", "//");
 end
 
-function writeReport(fuel, links, rollup, numOff, numChildren)
+function writeReport(fuel, links, rollup, centres)
 fileName = fullfile(getOutputDir("reports"), "FuelAnalysisReport.txt");
 fid = fopen(fileName, "wt");
 if fid == -1
@@ -244,15 +223,24 @@ nFail = sum(links.Result == "FAIL");
 fprintf(fid, "\n%d checks: %d pass, %d fail, %d skipped.\n", height(links), ...
     sum(links.Result == "PASS"), nFail, sum(links.Result == "SKIPPED"));
 
-fprintf(fid, "\n2. ROLL-UP OF %d CHILD COMPONENTS (%d off, excluded) vs. %s\n%s\n", ...
-    numChildren, numOff, fuel.Name, repmat('-', 1, 100));
-fprintf(fid, "%-18s | %14s | %14s | %14s | %s\n", "Child property", "Child roll-up", "Parent value", "Difference", "Parent property");
+fprintf(fid, "\n2. FUEL SYSTEM TOTALS (sum of its components; resources: components that are on)\n%s\n", ...
+    repmat('-', 1, 100));
+fprintf(fid, "%-52s | %14s | %-8s | %5s\n", "Property", "Total", "Unit", "Parts");
 for k = 1:height(rollup)
-    fprintf(fid, "%-18s | %14.6g | %14.6g | %14.6g | %s\n", rollup.Property(k), rollup.ChildRollup(k), ...
-        rollup.ParentValue(k), rollup.Difference(k), rollup.ParentProperty(k));
+    fprintf(fid, "%-52s | %14.6g | %-8s | %5d\n", rollup.Property(k), rollup.ComponentSum(k), ...
+        rollup.Unit(k), rollup.NumComponents(k));
 end
-fprintf(fid, "\nThe parent's own values are what ship-level reports use. A non-zero difference means\n");
-fprintf(fid, "the fuel system's summary values and its component data disagree.\n%s\n", line);
+fprintf(fid, "%-52s | %8.3f, %.3f, %.3f m\n", "Centre of gravity (LCG, VCG, TCG)", centres);
+own = rollup(~isnan(rollup.ParentValue), :);
+if isempty(own)
+    fprintf(fid, "\n%s carries no summary values of its own (component sum is authoritative).\n", fuel.Name);
+else
+    fprintf(fid, "\n** %s carries its own values for %d properties; these are counted IN ADDITION to its\n", ...
+        fuel.Name, height(own));
+    fprintf(fid, "   components and double-count. Remove them from the property table: %s\n", ...
+        strjoin(own.Property, ", "));
+end
+fprintf(fid, "%s\n", line);
 
 fprintf('Fuel analysis: %d connection checks (%d fail). Report written to "%s".\n', height(links), nFail, fileName);
 end
