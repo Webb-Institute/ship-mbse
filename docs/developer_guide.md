@@ -356,7 +356,7 @@ Verification tests are automated MATLAB unit test scripts located in the /script
 
 > **Known issues (October 2026):**
 > * The requirement set has **no custom attributes yet**, so `PerfVal1` cannot be read. `test_ExistComp_01` and both `test_Req_FuelEndurance` tests fail until the attributes are added and populated.
-> * `test_Req_FuelEndurance_02` currently has no requirement link (see `handoff/traceability_repair_2026-10.md`).
+> * `test_Req_FuelEndurance_02` verifies REQ-403 Reserve Fuel Quantity: endurance must cover the REQ-402 period plus the reserve percentage.
 > * The supply-vs-demand tests pass vacuously if no matching components are found.
 >
 > See `handoff/known_issues.md`.

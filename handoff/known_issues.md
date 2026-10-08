@@ -37,9 +37,10 @@ Remove an item here when its fix is merged.
   tests can't read thresholds.
 - Most requirements are qualitative. REQ-505, 508 and 511–513 contain placeholders
   (`[vi]`, `[d]`, `[X]`, `[D]`). All NEED items are typed Functional.
-- Dangling links were repaired in October 2026; 8 allocations need an engineering review.
-  See [`traceability_repair_2026-10.md`](traceability_repair_2026-10.md).
-- `test_Req_FuelEndurance_02` has no requirement link.
+- Dangling links were repaired and the reviewed re-links applied in October 2026. See
+  [`traceability_repair_2026-10.md`](traceability_repair_2026-10.md).
+- REQ-402 (100 days) and REQ-403 (1% reserve) hold their values only in the requirement text, so
+  the endurance tests can't read them yet.
 
 ## Scripts and tests
 
@@ -65,7 +66,7 @@ Remove an item here when its fix is merged.
 ## Repository
 
 - `SYSTEMCOMPLEX.slx` was removed from `main` in October 2026. It is preserved at the git tag
-  `archive/systemcomplex-2026-07`.
+  `archive/systemcomplex-2026-07` and on the `version1` snapshot branch.
 - `SYSTEM.slx` is a single 9.5 MB binary file, so concurrent edits conflict. Splitting it into
   per-group referenced models under a master `SYSTEM` is planned.
 - No CI. Tests and checks run only locally.

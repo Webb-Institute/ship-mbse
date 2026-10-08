@@ -85,4 +85,4 @@ ship-mbse/
 
 ## License
 
-To be determined by the project sponsor. Until then, all rights reserved; internal research use only.
+To be determined. The project is intended to be released as open source. **MIT** or **BSD 3-Clause** is the likely choice, pending confirmation of how the release is approved (Webb Institute and project sponsor). Until a `LICENSE` file is added, all rights are reserved.
